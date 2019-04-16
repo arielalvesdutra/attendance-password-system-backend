@@ -2,27 +2,27 @@
 
 namespace Tests\Entities;
 
-use App\Entities\TicketWindow;
+use App\Entities\AttendanceStatus;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class TicketWindowTest extends TestCase
+class AttendanceStatusTest extends TestCase
 {
     protected function assertPreConditions(): void
     {
         $this->assertTrue(
-          class_exists('App\Entities\TicketWindow'),
-          "Classe App\Entities\TicketWindow não existe!"
+          class_exists('App\Entities\AttendanceStatus'),
+          "Classe App\Entities\AttendanceStatus não existe!"
         );
     }
 
     public function testSetName()
     {
-        $name = "PA - 01";
-        $ticketWindowEntity = new TicketWindow();
+        $name = "Criado";
+        $attendanceStatusEntity = new AttendanceStatus();
 
-        $ticketWindowEntity->setName($name);
+        $attendanceStatusEntity->setName($name);
     }
 
     public function testSetNameWithInvalidDataShouldThrowAnInvalidArgumentException()
@@ -31,21 +31,21 @@ class TicketWindowTest extends TestCase
 
         $name = "";
 
-        $ticketWindowEntity = new TicketWindow();
+        $attendanceStatusEntity = new AttendanceStatus();
 
-        $ticketWindowEntity->setName($name);
+        $attendanceStatusEntity->setName($name);
     }
 
     public function testGetName()
     {
-        $name = "PA - 01";
-        $ticketWindowEntity = new TicketWindow();
+        $name = "Criado";
+        $attendanceStatusEntity = new AttendanceStatus();
 
-        $ticketWindowEntity->setName($name);
+        $attendanceStatusEntity->setName($name);
 
         $this->assertEquals(
             $name,
-            $ticketWindowEntity->getName(),
+            $attendanceStatusEntity->getName(),
             'Os nomes não conferem.'
         );
     }
@@ -54,7 +54,7 @@ class TicketWindowTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $ticketWindowEntity = new TicketWindow();
-        $ticketWindowEntity->getName();
+        $attendanceStatusEntity = new AttendanceStatus();
+        $attendanceStatusEntity->getName();
     }
 }
