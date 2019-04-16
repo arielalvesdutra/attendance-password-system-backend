@@ -60,7 +60,7 @@ class AttendancePasswordCategoryTest extends TestCase
 
     public function testSetCode()
     {
-        $code = "test_category";
+        $code = "TEST";
         $categoryEntity = new AttendancePasswordCategory();
 
         $categoryEntity->setCode($code);
@@ -79,7 +79,7 @@ class AttendancePasswordCategoryTest extends TestCase
 
     public function testGetCode()
     {
-        $code = "test_category";
+        $code = "TEST";
         $categoryEntity = new AttendancePasswordCategory();
 
         $categoryEntity->setCode($code);
