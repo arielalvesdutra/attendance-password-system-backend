@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit
+        bootstrap="./bootstrap.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        colors="true"
+        stopOnFailure="false"
+>
+    <testsuites>
+        <testsuite name="Attendance Password System tests">
+            <directory phpVersion="7.3" suffix=".php">./tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

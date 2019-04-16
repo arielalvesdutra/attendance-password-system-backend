@@ -1,2 +1,4 @@
 .idea
 vendor/
+ddl.sql
+.phpunit.result.cache
