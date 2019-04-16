@@ -7,8 +7,6 @@ use InvalidArgumentException;
 
 class TicketWindow extends Entity
 {
-    protected $code;
-
     protected $name;
 
     public function getName(): string

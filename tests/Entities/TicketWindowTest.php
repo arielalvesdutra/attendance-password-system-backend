@@ -57,6 +57,4 @@ class TicketWindowTest extends TestCase
         $categoryEntity = new TicketWindow();
         $categoryEntity->getName();
     }
-
-
 }
