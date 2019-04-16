@@ -20,9 +20,9 @@ class TicketWindowTest extends TestCase
     public function testSetName()
     {
         $name = "PA - 01";
-        $categoryEntity = new TicketWindow();
+        $ticketWindowEntity = new TicketWindow();
 
-        $categoryEntity->setName($name);
+        $ticketWindowEntity->setName($name);
     }
 
     public function testSetNameWithInvalidDataShouldThrowAnInvalidArgumentException()
@@ -31,21 +31,21 @@ class TicketWindowTest extends TestCase
 
         $name = "";
 
-        $categoryEntity = new TicketWindow();
+        $ticketWindowEntity = new TicketWindow();
 
-        $categoryEntity->setName($name);
+        $ticketWindowEntity->setName($name);
     }
 
     public function testGetName()
     {
         $name = "PA - 01";
-        $categoryEntity = new TicketWindow();
+        $ticketWindowEntity = new TicketWindow();
 
-        $categoryEntity->setName($name);
+        $ticketWindowEntity->setName($name);
 
         $this->assertEquals(
             $name,
-            $categoryEntity->getName(),
+            $ticketWindowEntity->getName(),
             'Os nomes não conferem.'
         );
     }
@@ -54,7 +54,7 @@ class TicketWindowTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $categoryEntity = new TicketWindow();
-        $categoryEntity->getName();
+        $ticketWindowEntity = new TicketWindow();
+        $ticketWindowEntity->getName();
     }
 }
