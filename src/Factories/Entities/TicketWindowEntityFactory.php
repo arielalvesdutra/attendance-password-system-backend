@@ -11,4 +11,20 @@ class TicketWindowEntityFactory
         return (new TicketWindow($id))
                 ->setName($name);
     }
+
+    public static function createFromFetchAllArray(array $records)
+    {
+        $entitiesArray = [];
+
+
+        foreach ($records as $record) {
+            $entitiesArray[] = TicketWindowEntityFactory::create(
+                $record['name'],
+                $record['id']
+            );
+        }
+//        debugd( $entitiesArray);
+
+        return $entitiesArray;
+    }
 }

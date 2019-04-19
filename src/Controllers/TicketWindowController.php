@@ -28,4 +28,49 @@ class TicketWindowController extends AbstractController
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }
+
+    public function delete(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $parameters['id'] = $request->getAttribute('id');
+
+            $this->service->deleteTicketWindow($parameters);
+
+            return $response->withStatus(200);
+
+        } catch (Exception $exception) {
+
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function retrieve(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $parameters['id'] = $request->getAttribute('id');
+
+            $ticketWindowRecords = $this->service->retrieveTicketWindow($parameters);
+
+            return $response->withJson($ticketWindowRecords, 200);
+
+        } catch (Exception $exception) {
+
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function retrieveAll(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $ticketWindowRecords = $this->service->retrieveAllTicketWindow();
+
+            return $response->withJson($ticketWindowRecords, 200);
+
+        } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
 }

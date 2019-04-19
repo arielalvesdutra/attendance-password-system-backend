@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Exceptions\NotFoundException;
+use App\Factories\Entities\TicketWindowEntityFactory;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 
 class TicketWindowRepository extends AbstractRepository
 {
@@ -17,33 +17,41 @@ class TicketWindowRepository extends AbstractRepository
 
     public function find(int $id)
     {
-        $ticketWindowEntity = $this->connection->createQueryBuilder()
-            ->select()
+        $ticketWindowRecord = $this->connection->createQueryBuilder()
+            ->select("*")
             ->from($this->getTableName(), 'tw')
             ->where('tw.id = ' . $id)
             ->orderBy('tw.name')
             ->execute()
             ->fetch();
 
-        if (empty($ticketWindowEntity)) {
+        if (empty($ticketWindowRecord)) {
             throw new NotFoundException('Nenhum registro de guiche encontrado');
         }
+
+        $ticketWindowEntity = TicketWindowEntityFactory::create(
+            $ticketWindowRecord['name'],
+            $ticketWindowRecord['id']
+        );
 
         return $ticketWindowEntity;
     }
 
     public function findAll()
     {
-        $ticketWindowEntities = $this->connection->createQueryBuilder()
-            ->select()
+        $ticketWindowRecords = $this->connection->createQueryBuilder()
+            ->select("*")
             ->from($this->getTableName(), 'tw')
             ->orderBy('tw.name')
             ->execute()
             ->fetchAll();
 
-        if (empty($ticketWindowEntities)) {
+        if (empty($ticketWindowRecords)) {
             throw new NotFoundException('Nenhum registro de guiche encontrado');
         }
+
+        $ticketWindowEntities =
+            TicketWindowEntityFactory::createFromFetchAllArray($ticketWindowRecords);
 
         return $ticketWindowEntities;
     }

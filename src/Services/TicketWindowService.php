@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Formatters\Formatter;
 use App\Repositories\TicketWindowRepository;
 use App\Factories\Entities\TicketWindowEntityFactory;
 use Doctrine\DBAL\Connection;
@@ -57,6 +58,17 @@ class TicketWindowService
         if (empty($parameters['id'])) {
             throw new InvalidArgumentException('Parametros necessários não preenchidos.');
         }
+
+        $ticketWindowEntity = $this->repository->find($parameters['id']);
+
+        $this->connection->beginTransaction();
+
+        $this->connection->delete(
+            $this->repository->getTableName(),
+            [ 'id' => $ticketWindowEntity->getId() ]
+        );
+
+        $this->connection->commit();
     }
 
     public function retrieveTicketWindow(array $parameters)
@@ -67,13 +79,13 @@ class TicketWindowService
 
         $ticketWindowEntity = $this->repository->find($parameters['id']);
 
-        return $ticketWindowEntity;
+        return Formatter::fromObjectToArray($ticketWindowEntity);
     }
 
     public function retrieveAllTicketWindow()
     {
         $ticketWindowEntities = $this->repository->findAll();
 
-        return $ticketWindowEntities;
+        return Formatter::fromObjectToArray($ticketWindowEntities);
     }
 }
