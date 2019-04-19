@@ -16,14 +16,12 @@ class TicketWindowEntityFactory
     {
         $entitiesArray = [];
 
-
         foreach ($records as $record) {
             $entitiesArray[] = TicketWindowEntityFactory::create(
                 $record['name'],
                 $record['id']
             );
         }
-//        debugd( $entitiesArray);
 
         return $entitiesArray;
     }
