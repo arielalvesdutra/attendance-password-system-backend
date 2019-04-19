@@ -51,9 +51,9 @@ class TicketWindowController extends AbstractController
 
             $parameters['id'] = $request->getAttribute('id');
 
-            $ticketWindowRecords = $this->service->retrieveTicketWindow($parameters);
+            $ticketWindowRecord = $this->service->retrieveTicketWindow($parameters);
 
-            return $response->withJson($ticketWindowRecords, 200);
+            return $response->withJson($ticketWindowRecord, 200);
 
         } catch (Exception $exception) {
 
