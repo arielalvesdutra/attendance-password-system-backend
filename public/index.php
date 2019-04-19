@@ -69,6 +69,9 @@ $slim->get('/', function() {
 /**
  * TicketWindow
  */
+$slim->delete('/ticket-window/{id}', TicketWindowController::class . ":delete");
+$slim->get('/ticket-window/{id}', TicketWindowController::class . ":retrieve");
+$slim->get('/ticket-window', TicketWindowController::class . ":retrieveAll");
 $slim->post('/ticket-window', TicketWindowController::class . ":create");
 
 $slim->run();
