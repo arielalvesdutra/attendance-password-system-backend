@@ -30,22 +30,14 @@ class TicketWindowRepositoryTest extends TestCase
     {
         $id = 1;
 
-        $connection =  $this->createMock(Connection::class);
-
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connection
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowRepository->find($id);
     }
 
     public function testFindAll()
     {
-        $connection =  $this->createMock(Connection::class);
-
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connection
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowRepository->findAll();
     }
