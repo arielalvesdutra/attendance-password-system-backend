@@ -2,6 +2,7 @@
 
 namespace Tests\Services;
 
+use App\Factories\Entities\TicketWindowEntityFactory;
 use App\Repositories\TicketWindowRepository;
 use App\Services\TicketWindowService;
 use Doctrine\DBAL\Connection;
@@ -115,6 +116,9 @@ class TicketWindowServiceTest extends TestCase
     {
         $connectionMock =  $this->createMock(Connection::class);
         $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
+
+        $ticketWindowRepository->method('find')
+                ->willReturn(TicketWindowEntityFactory::create('PA - 001', 1));
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
