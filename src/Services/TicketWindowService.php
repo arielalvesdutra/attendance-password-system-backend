@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Repositories\TicketWindowRepository;
+use App\Factories\Entities\TicketWindowEntityFactory;
 use Doctrine\DBAL\Connection;
+use Exception;
 use InvalidArgumentException;
 
 class TicketWindowService
@@ -22,10 +25,31 @@ class TicketWindowService
     public function createTicketWindow(array $parameters)
     {
         if (empty($parameters['name'])) {
-            throw new InvalidArgumentException('Parametros necessários não preenchidos.');
+            throw new InvalidArgumentException('Parametros necessários não preenchidos.', 400);
         }
 
+        $ticketWindowEntity = TicketWindowEntityFactory::create($parameters['name']);
 
+        try {
+
+            $ticketEntity =
+                $this->repository->findByName($ticketWindowEntity->getName());
+
+            if (!empty($ticketEntity)) {
+
+                throw new Exception("Já existe um registro com o mesmo nome", 400);
+            }
+        } catch (NotFoundException $notFoundException) {
+
+            $this->connection->beginTransaction();
+
+            $this->connection->insert(
+                $this->repository->getTableName(),
+                [ 'name' => $ticketWindowEntity->getName() ]
+            );
+
+            $this->connection->commit();
+        }
     }
 
     public function deleteTicketWindow(array $parameters)
@@ -40,10 +64,16 @@ class TicketWindowService
         if (empty($parameters['id'])) {
             throw new InvalidArgumentException('Parametros necessários não preenchidos.');
         }
+
+        $ticketWindowEntity = $this->repository->find($parameters['id']);
+
+        return $ticketWindowEntity;
     }
 
     public function retrieveAllTicketWindow()
     {
         $ticketWindowEntities = $this->repository->findAll();
+
+        return $ticketWindowEntities;
     }
 }
