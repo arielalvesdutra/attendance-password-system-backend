@@ -2,14 +2,14 @@
 
 namespace App\Factories\Entities;
 
-use App\Entities\TicketWindow;
+use App\Entities\AttendanceStatus;
 
-class TicketWindowEntityFactory
+class AttendanceStatusEntityFactory
 {
-    public static function create(string $name, int $id = null): TicketWindow
+    public static function create(string $name, int $id = null): AttendanceStatus
     {
-        return (new TicketWindow($id))
-                ->setName($name);
+        return (new AttendanceStatus($id))
+            ->setName($name);
     }
 
     public static function createFromFetchAllArray(array $records)
@@ -17,7 +17,7 @@ class TicketWindowEntityFactory
         $entitiesArray = [];
 
         foreach ($records as $record) {
-            $entitiesArray[] = TicketWindowEntityFactory::create(
+            $entitiesArray[] = AttendanceStatusEntityFactory::create(
                 $record['name'],
                 $record['id']
             );

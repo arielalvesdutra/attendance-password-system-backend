@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Services\TicketWindowService;
+use App\Services\AttendanceStatusService;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class TicketWindowController extends AbstractController
+class AttendanceStatusController extends AbstractController
 {
     /**
-     * @var TicketWindowService
+     * @var AttendanceStatusService
      */
     protected $service;
 
@@ -20,7 +20,7 @@ class TicketWindowController extends AbstractController
 
             $parameters = $request->getParsedBody();
 
-            $this->service->createTicketWindow($parameters);
+            $this->service->createAttendanceStatus($parameters);
 
             return $response->withStatus(201);
 
@@ -35,7 +35,7 @@ class TicketWindowController extends AbstractController
 
             $parameters['id'] = $request->getAttribute('id');
 
-            $this->service->deleteTicketWindow($parameters);
+            $this->service->deleteAttendanceStatus($parameters);
 
             return $response->withStatus(200);
 
@@ -51,9 +51,9 @@ class TicketWindowController extends AbstractController
 
             $parameters['id'] = $request->getAttribute('id');
 
-            $ticketWindowRecord = $this->service->retrieveTicketWindow($parameters);
+            $attendanceStatusRecord = $this->service->retrieveAttendanceStatus($parameters);
 
-            return $response->withJson($ticketWindowRecord, 200);
+            return $response->withJson($attendanceStatusRecord, 200);
 
         } catch (Exception $exception) {
 
@@ -65,11 +65,28 @@ class TicketWindowController extends AbstractController
     {
         try {
 
-            $ticketWindowRecords = $this->service->retrieveAllTicketWindow();
+            $ticketWindowRecords = $this->service->retrieveAllAttendanceStatus();
 
             return $response->withJson($ticketWindowRecords, 200);
 
         } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function update(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $parameters = $request->getParsedBody();
+            $parameters['id'] = $request->getAttribute('id');
+
+            $this->service->updateAttendanceStatus($parameters);
+
+            return $response->withStatus(200);
+
+        } catch (Exception $exception) {
+
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }
