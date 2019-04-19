@@ -32,9 +32,7 @@ class TicketWindowServiceTest extends TestCase
     public function testCreateTicketWindow()
     {
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -53,9 +51,7 @@ class TicketWindowServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -70,9 +66,7 @@ class TicketWindowServiceTest extends TestCase
     public function testRetrieveAllTicketWindow()
     {
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -85,9 +79,7 @@ class TicketWindowServiceTest extends TestCase
     public function testRetrieveTicketWindow()
     {
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -107,9 +99,7 @@ class TicketWindowServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -124,9 +114,7 @@ class TicketWindowServiceTest extends TestCase
     public function testDeleteTicketWindow()
     {
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
@@ -146,9 +134,7 @@ class TicketWindowServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $connectionMock =  $this->createMock(Connection::class);
-        $ticketWindowRepository = new TicketWindowRepository(
-            $connectionMock
-        );
+        $ticketWindowRepository = $this->createMock(TicketWindowRepository::class);;
 
         $ticketWindowService = new TicketWindowService(
             $connectionMock,
