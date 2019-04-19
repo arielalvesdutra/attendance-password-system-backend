@@ -2,6 +2,7 @@
 
 require '../bootstrap.php';
 
+use App\Controllers\AttendanceStatusController;
 use App\Controllers\TicketWindowController;
 use Slim\App;
 use Slim\Container;
@@ -30,6 +31,21 @@ $container['Connection'] = function () {
     ];
 
     return \Doctrine\DBAL\DriverManager::getConnection($connectionParameters, $config);
+};
+
+/**
+ * Injeta o AttendanceStatusController
+ * @param $container
+ * @return AttendanceStatusController
+ */
+$container[AttendanceStatusController::class] = function ($container)
+{
+    return new \App\Controllers\AttendanceStatusController(
+        new \App\Services\AttendanceStatusService(
+            $container['Connection'],
+            new \App\Repositories\AttendanceStatusRepository($container['Connection'])
+        )
+    );
 };
 
 /**
@@ -65,6 +81,15 @@ $slim = new App($container);
 $slim->get('/', function() {
     return "Primeira rota.";
 });
+
+/**
+ * AttendanceStatus
+ */
+$slim->delete('/attendance-status/{id}', AttendanceStatusController::class . ":delete");
+$slim->get('/attendance-status', AttendanceStatusController::class . ":retrieveAll");
+$slim->get('/attendance-status/{id}', AttendanceStatusController::class . ":retrieve");
+$slim->post('/attendance-status', AttendanceStatusController::class . ":create");
+$slim->put('/attendance-status/{id}', AttendanceStatusController::class . ":update");
 
 /**
  * TicketWindow
