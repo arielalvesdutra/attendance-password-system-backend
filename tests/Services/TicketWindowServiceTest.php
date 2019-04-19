@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
-
 class TicketWindowServiceTest extends TestCase
 {
 
@@ -131,7 +130,6 @@ class TicketWindowServiceTest extends TestCase
 
         $ticketWindowService->deleteTicketWindow($parameters);
     }
-
 
     public function testDeleteTicketWindowWithInvalidDataShouldThrownAnException()
     {

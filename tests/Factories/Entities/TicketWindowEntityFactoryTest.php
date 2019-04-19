@@ -37,6 +37,11 @@ class TicketWindowEntityFactoryTest extends TestCase
             $name,
             $ticketWindowEntity->getName()
         );
+
+        $this->assertInstanceOf(
+            TicketWindow::class,
+            $ticketWindowEntity
+        );
     }
 
     public function testCreateWithoutId()
@@ -53,6 +58,11 @@ class TicketWindowEntityFactoryTest extends TestCase
         $this->assertEquals(
           $name,
           $ticketWindowEntity->getName()
+        );
+
+        $this->assertInstanceOf(
+            TicketWindow::class,
+            $ticketWindowEntity
         );
     }
 }
