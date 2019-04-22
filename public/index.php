@@ -2,6 +2,7 @@
 
 require '../bootstrap.php';
 
+use App\Controllers\AttendancePasswordCategoryController;
 use App\Controllers\AttendanceStatusController;
 use App\Controllers\TicketWindowController;
 use Slim\App;
@@ -31,6 +32,21 @@ $container['Connection'] = function () {
     ];
 
     return \Doctrine\DBAL\DriverManager::getConnection($connectionParameters, $config);
+};
+
+/**
+ * Injeta o AttendancePasswordCategoryController
+ * @param $container
+ * @return AttendancePasswordCategoryController
+ */
+$container[AttendancePasswordCategoryController::class] = function ($container)
+{
+    return new \App\Controllers\AttendancePasswordCategoryController(
+        new \App\Services\AttendancePasswordCategoryService(
+            $container['Connection'],
+            new \App\Repositories\AttendancePasswordCategoryRepository($container['Connection'])
+        )
+    );
 };
 
 /**
@@ -81,6 +97,21 @@ $slim = new App($container);
 $slim->get('/', function() {
     return "Primeira rota.";
 });
+
+/**
+ * AttendanceCategory
+ */
+
+$slim->delete('/attendance-categories/{id}',
+    AttendancePasswordCategoryController::class . ":delete");
+$slim->get('/attendance-categories/{id}',
+    AttendancePasswordCategoryController::class . ":retrieve");
+$slim->get('/attendance-categories',
+    AttendancePasswordCategoryController::class . ":retrieveAll");
+$slim->post('/attendance-categories',
+    AttendancePasswordCategoryController::class . ":create");
+$slim->put('/attendance-categories/{id}',
+    AttendancePasswordCategoryController::class . ":update");
 
 /**
  * AttendanceStatus
