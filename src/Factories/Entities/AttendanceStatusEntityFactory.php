@@ -12,7 +12,7 @@ class AttendanceStatusEntityFactory
             ->setName($name);
     }
 
-    public static function createFromFetchAllArray(array $records)
+    public static function createFromFetchAllArray(array $records): array
     {
         $entitiesArray = [];
 

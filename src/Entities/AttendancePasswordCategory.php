@@ -29,17 +29,22 @@ class AttendancePasswordCategory extends Entity
             return $this->name;
         }
 
-        throw new Exception('O atributo nome está vazio.');
+        throw new Exception('O atributo nome está vazio.', 400);
     }
 
     public function setCode(string $code)
     {
-        if (!empty($code)) {
-            $this->code = $code;
-            return $this;
+        if (empty($code)) {
+            throw new InvalidArgumentException('Parametro código inválido.', 400);
         }
 
-        throw new InvalidArgumentException('Parametro código inválido.');
+        if (strlen($code) > 10) {
+            throw new InvalidArgumentException(
+                'Parametro código é maior do que 10 caracteres.', 400);
+        }
+
+        $this->code = $code;
+        return $this;
     }
 
     public function setName(string $name)
@@ -49,6 +54,6 @@ class AttendancePasswordCategory extends Entity
             return $this;
         }
 
-        throw new InvalidArgumentException('Parametro nome inválido.');
+        throw new InvalidArgumentException('Parametro nome inválido.', 400);
     }
 }

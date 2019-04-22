@@ -77,6 +77,18 @@ class AttendancePasswordCategoryTest extends TestCase
         $categoryEntity->setCode($code);
     }
 
+    public function
+        testSetCodeGreaterThan10CharsShouldThrowAnInvalidArgumentException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $code = "MORE_THAN_10_CHARS";
+
+        $categoryEntity = new AttendancePasswordCategory();
+
+        $categoryEntity->setCode($code);
+    }
+
     public function testGetCode()
     {
         $code = "TEST";
