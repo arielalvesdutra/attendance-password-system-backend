@@ -14,7 +14,9 @@ Senha de Atendimento:
 | ---- | ---- |---- |
 | /attendance-passwords  | GET  | Retorna todas as Senhas de Atendimento
 | /attendance-passwords/{id}  | GET  | Retorna a Senha de Atendimento pelo ID
-| /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna atendimentos em andamento
+| /attendance-passwords/search/retrieve-10-last-finished  | GET  | Retorna 10 últimos atendimentos concluídos ou cancelados
+| /attendance-passwords/search/retrieve-awaiting  | GET  | Retorna senhas aguardando atendimento
+| /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna senhas em atendimento
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:

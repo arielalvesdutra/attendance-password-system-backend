@@ -92,6 +92,13 @@ class AttendancePasswordService
         $this->connection->commit();
     }
 
+    public function retrieve10LastFinishedAttendances()
+    {
+        $passwordsEntities = $this->repository->find10LastFinishedAttendances();
+
+        return Formatter::fromObjectToArray($passwordsEntities);
+    }
+
     public function retrieveAttendancePassword(array $parameters)
     {
         if (empty($parameters['id'])) {

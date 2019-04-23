@@ -61,6 +61,20 @@ class AttendancePasswordController extends AbstractController
         }
     }
 
+    public function retrieve10LastFinished(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $attendanceCategories =
+                $this->service->retrieve10LastFinishedAttendances();
+
+            return $response->withJson($attendanceCategories, 200);
+
+        } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
     public function retrieveAll(ServerRequestInterface $request, ResponseInterface $response)
     {
         try {
@@ -73,7 +87,6 @@ class AttendancePasswordController extends AbstractController
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }
-
 
     public function retrieveAwaiting(ServerRequestInterface $request, ResponseInterface $response)
     {
