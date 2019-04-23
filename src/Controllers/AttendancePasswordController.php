@@ -73,4 +73,17 @@ class AttendancePasswordController extends AbstractController
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }
+
+    public function retrieveInProgress(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $attendanceCategories = $this->service->retrieveInProgressAttendances();
+
+            return $response->withJson($attendanceCategories, 200);
+
+        } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
 }

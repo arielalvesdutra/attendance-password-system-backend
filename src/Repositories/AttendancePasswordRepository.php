@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Entities\AttendanceStatus;
+use App\Entities\Status\InProgressStatus;
 use App\Exceptions\NotFoundException;
 use App\Factories\Entities\AttendancePasswordEntityFactory;
 use Doctrine\DBAL\Connection;
@@ -89,6 +91,57 @@ class AttendancePasswordRepository extends AbstractRepository
 
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $statusRepository = new AttendanceStatusRepository($this->connection);
+        $ticketWindowRepository =  new TicketWindowRepository($this->connection);
+
+        foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
+            $categoryEntity = $categoryRepository->find(
+                $attendancePasswordRecord['id_category']
+            );
+
+            $statusEntity = $statusRepository->find(
+                $attendancePasswordRecord['id_status']
+            );
+
+            $ticketWindowEntity = null;
+
+            if ($attendancePasswordRecord['id_ticket_window']) {
+                $ticketWindowEntity = $ticketWindowRepository->find(
+                    $attendancePasswordRecord['id_ticket_window']
+                );
+            }
+
+            $attendancePasswordEntities[] = AttendancePasswordEntityFactory::create(
+                $attendancePasswordRecord['name'],
+                $categoryEntity,
+                $statusEntity,
+                $ticketWindowEntity,
+                $attendancePasswordRecord['id'],
+            );
+        }
+
+        return $attendancePasswordEntities;
+    }
+
+    public function findAttendancesInProgress()
+    {
+        $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $attendancePasswordRecords = $this->connection->createQueryBuilder()
+            ->select('ap.*')
+            ->from($this->getTableName(), 'ap')
+            ->innerJoin('ap', $statusRepository->getTableName(), 'aps', 'ap.id_status = aps.id')
+            ->where('aps.code = ?')
+            ->setParameter(0, InProgressStatus::CODE)
+            ->execute()
+            ->fetchAll();
+
+        if (empty($attendancePasswordRecords)) {
+            throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
+        }
+
+        $attendancePasswordEntities = [];
+
+        $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $ticketWindowRepository =  new TicketWindowRepository($this->connection);
 
         foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
