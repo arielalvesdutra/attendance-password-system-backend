@@ -83,7 +83,7 @@ Guichê - /ticket-window
 
 ### Exemplos de uso dos métodos PUT
 
-Categoria de Senha de Atendimento - /attendance-categories/{id}:
+Categoria de Senha de Atendimento - /attendance-categories/1:
 
 ```json
 {
@@ -92,7 +92,7 @@ Categoria de Senha de Atendimento - /attendance-categories/{id}:
 }
 ```
 
-Status de Senha de Atendimento - /attendance-status/{id}:
+Status de Senha de Atendimento - /attendance-status/1:
 
 ```json
 {
