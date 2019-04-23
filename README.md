@@ -45,4 +45,59 @@ Guichê:
 | /ticket-window/{id}  | GET | Retorna um Guichê pelo ID
 | /ticket-window  | POST | Cria um Guichê
 
+### Exemplos de uso dos métodos POST
+
+Senha de atendimento - /attendance-passwords:
+
+```json
+{
+  "categoryId" : 1
+}
+```
+
+Categoria de Senha de Atendimento - /attendance-categories:
+
+```json
+{
+  "name" : "Planejamento",
+  "code" : "PLAN"
+}
+```
+
+Status de Senha de Atendimento - /attendance-status:
+
+```json
+{
+  "name" : "Aguardando Gerente",
+  "code" : "AWAITING_MANAGER"
+}
+```
+
+Guichê - /ticket-window
+
+```json
+{
+  "name" : "CAIXA - 001"
+}
+```
+
+### Exemplos de uso dos métodos PUT
+
+Categoria de Senha de Atendimento - /attendance-categories/{id}:
+
+```json
+{
+  "name" : "Planejamento",
+  "code" : "PLAN"
+}
+```
+
+Status de Senha de Atendimento - /attendance-status/{id}:
+
+```json
+{
+  "name" : "Aguardando Gerente",
+  "code" : "AWAITING_MANAGER"
+}
+```
 
