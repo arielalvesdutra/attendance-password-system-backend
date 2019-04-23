@@ -2,7 +2,7 @@
 
 namespace Tests\Factories\Entities;
 
-use App\Entities\AttendanceStatus;
+use App\Entities\Status\CreatedStatus;
 use App\Factories\Entities\AttendanceStatusEntityFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -20,9 +20,11 @@ class AttendanceStatusEntityFactoryTest extends TestCase
     {
         $id = 1;
         $name = "Senha Emitida";
+        $code = "CREATED";
 
         $attendanceStatusEntity = AttendanceStatusEntityFactory::create(
             $name,
+            $code,
             $id
         );
 
@@ -36,8 +38,13 @@ class AttendanceStatusEntityFactoryTest extends TestCase
           $attendanceStatusEntity->getName()
         );
 
+        $this->assertEquals(
+            $name,
+            $attendanceStatusEntity->getName()
+        );
+
         $this->assertInstanceOf(
-          AttendanceStatus::class,
+            CreatedStatus::class,
           $attendanceStatusEntity
         );
     }
@@ -46,9 +53,11 @@ class AttendanceStatusEntityFactoryTest extends TestCase
     {
 
         $name = "Senha Emitida";
+        $code = "CREATED";
 
         $attendanceStatusEntity = AttendanceStatusEntityFactory::create(
-            $name
+            $name,
+            $code
         );
 
         $this->assertEquals(
@@ -57,7 +66,7 @@ class AttendanceStatusEntityFactoryTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            AttendanceStatus::class,
+            CreatedStatus::class,
             $attendanceStatusEntity
         );
     }

@@ -7,7 +7,19 @@ use InvalidArgumentException;
 
 class AttendanceStatus extends Entity
 {
+    protected $code;
+
     protected $name;
+
+    public function getCode()
+    {
+        if (!empty($this->code)) {
+
+            return $this->code;
+        }
+
+        throw new Exception("O atributo código está vazio");
+    }
 
     public function getName(): string
     {
@@ -27,5 +39,16 @@ class AttendanceStatus extends Entity
         }
 
         throw new InvalidArgumentException('Parametro nome inválido.');
+    }
+
+    public function setCode(string $code)
+    {
+        if (!empty($code)) {
+
+            $this->code = $code;
+            return $this;
+        }
+
+        throw new InvalidArgumentException("Parâmetro código inválido.");
     }
 }
