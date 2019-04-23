@@ -15,7 +15,7 @@ class AttendancePassword extends Entity
 
     protected $ticketWindow;
 
-    public function getCategory()
+    public function getCategory(): AttendancePasswordCategory
     {
         if (!empty($this->category)) {
 
@@ -35,7 +35,7 @@ class AttendancePassword extends Entity
         throw new Exception('O atributo nome está vazio.');
     }
 
-    public function getStatus()
+    public function getStatus(): AttendanceStatus
     {
         if (!empty($this->status)) {
 
@@ -45,7 +45,7 @@ class AttendancePassword extends Entity
         throw new Exception('O atributo status está vazio.');
     }
 
-    public function getTicketWindow()
+    public function getTicketWindow(): TicketWindow
     {
         if (!empty($this->ticketWindow)) {
 

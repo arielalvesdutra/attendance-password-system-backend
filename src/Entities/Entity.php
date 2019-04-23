@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use InvalidArgumentException;
+
 abstract class Entity
 {
     protected $id;
@@ -15,7 +17,12 @@ abstract class Entity
 
     public function getId()
     {
-        return $this->id;
+        if (!empty($this->id)) {
+
+            return $this->id;
+        }
+
+        throw new InvalidArgumentException("O atributo id está vazio", 400);
     }
 
     public function setId(int $id)

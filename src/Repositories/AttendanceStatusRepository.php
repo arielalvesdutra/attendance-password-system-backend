@@ -31,6 +31,7 @@ class AttendanceStatusRepository extends AbstractRepository
 
         $attendanceStatusEntity = AttendanceStatusEntityFactory::create(
             $attendanceStatusRecord['name'],
+            $attendanceStatusRecord['code'],
             $attendanceStatusRecord['id']
         );
 
@@ -56,6 +57,30 @@ class AttendanceStatusRepository extends AbstractRepository
         return $attendanceStatusEntities;
     }
 
+    public function findFirstByCode(string $code)
+    {
+        $attendanceStatusRecord = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from($this->getTableName(), 'aps')
+            ->where( "aps.code = ?")
+            ->setParameter('0', $code)
+            ->execute()
+            ->fetch();
+
+        if (empty($attendanceStatusRecord)) {
+            throw new NotFoundException('Nenhum registro de status de atendimento encontrado');
+        }
+
+        $attendanceStatusEntities =
+            AttendanceStatusEntityFactory::create(
+                $attendanceStatusRecord['name'],
+                $attendanceStatusRecord['code'],
+                $attendanceStatusRecord['id']
+            );
+
+        return $attendanceStatusEntities;
+    }
+
     public function findByName(string $name)
     {
         $attendanceRecords = $this->connection->createQueryBuilder()
@@ -70,9 +95,9 @@ class AttendanceStatusRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de status de atendimento encontrado');
         }
 
-        $ticketEntities =
+        $attendanceStatusEntities =
             AttendanceStatusEntityFactory::createFromFetchAllArray($attendanceRecords);
 
-        return $ticketEntities;
+        return $attendanceStatusEntities;
     }
 }
