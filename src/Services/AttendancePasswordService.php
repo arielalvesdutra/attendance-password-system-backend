@@ -109,4 +109,11 @@ class AttendancePasswordService
 
         return Formatter::fromObjectToArray($passwordsEntities);
     }
+
+    public function retrieveInProgressAttendances()
+    {
+        $passwordsEntities = $this->repository->findAttendancesInProgress();
+
+        return Formatter::fromObjectToArray($passwordsEntities);
+    }
 }

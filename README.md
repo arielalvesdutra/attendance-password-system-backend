@@ -1,6 +1,6 @@
 # Descrição
 
-Esse sistema está sendo desenvolvido para praticar TDD e/ou Doctrine DBAL.
+Esse sistema está sendo desenvolvido para praticar TDD e Doctrine DBAL.
 
 O sistema tem por objetivo prover a criação de senhas de atendimento para empresas que possuem postos de atendimento ao cliente, mas que ficam limitadas a apenas a emissão de senhas de papel sem uso o sistemas para automatizar e centralizar o atendimento.
 
@@ -14,6 +14,7 @@ Senha de Atendimento:
 | ---- | ---- |---- |
 | /attendance-passwords  | GET  | Retorna todas as Senhas de Atendimento
 | /attendance-passwords/{id}  | GET  | Retorna a Senha de Atendimento pelo ID
+| /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna atendimentos em andamento
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:
