@@ -25,11 +25,14 @@ class AttendanceStatusService
 
     public function createAttendanceStatus(array $parameters)
     {
-        if (empty($parameters['name'])) {
+        if (empty($parameters['name']) || empty($parameters['code'])) {
             throw new InvalidArgumentException('Parametros necessários não preenchidos.', 400);
         }
 
-        $attendanceStatusEntity = AttendanceStatusEntityFactory::create($parameters['name']);
+        $attendanceStatusEntity = AttendanceStatusEntityFactory::create(
+            $parameters['name'],
+            $parameters['code']
+        );
 
         try {
 
