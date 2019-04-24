@@ -142,6 +142,8 @@ $slim->get('/attendance-passwords/search/retrieve-awaiting',
     AttendancePasswordController::class . ":retrieveAwaiting");
 $slim->get('/attendance-passwords/search/retrieve-in-progress',
     AttendancePasswordController::class . ":retrieveInProgress");
+$slim->patch('/attendance-passwords/{id}/attend-password',
+    AttendancePasswordController::class . ":attendPassword");
 $slim->post('/attendance-passwords', AttendancePasswordController::class . ":create");
 
 /**

@@ -17,6 +17,7 @@ Senha de Atendimento:
 | /attendance-passwords/search/retrieve-10-last-finished  | GET  | Retorna 10 últimos atendimentos concluídos ou cancelados
 | /attendance-passwords/search/retrieve-awaiting  | GET  | Retorna senhas aguardando atendimento
 | /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna senhas em atendimento
+| /attendance-passwords/{id}/attend-password  | PATCH | Atualiza o status da senha para "Em andamento" e seta um Guichê para a senha
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:
@@ -104,3 +105,12 @@ Status de Senha de Atendimento - /attendance-status/1:
 }
 ```
 
+### Exemplos de uso dos métodos PATCH
+
+Senha de Atendimento - /attendance-passwords/1/attend-password
+
+```json
+{
+  "ticketWindowId": 2
+}
+```
