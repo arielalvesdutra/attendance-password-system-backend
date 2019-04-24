@@ -6,6 +6,7 @@ use App\Controllers\AttendancePasswordController;
 use App\Controllers\AttendancePasswordCategoryController;
 use App\Controllers\AttendanceStatusController;
 use App\Controllers\TicketWindowController;
+use App\Middlewares\AccessControlAllow;
 use Slim\App;
 use Slim\Container;
 
@@ -112,6 +113,13 @@ $container->get('settings')
  * Instancia o Slim
  */
 $slim = new App($container);
+
+
+/**
+ * Adiciona Middleware para corrigir o problema de
+ * restrição de CORS
+ */
+$slim->add(new AccessControlAllow());
 
 $slim->get('/', function() {
     return "Primeira rota.";
