@@ -45,6 +45,21 @@ class AttendancePasswordController extends AbstractController
         }
     }
 
+    public function concludePassword(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        try {
+
+            $parameters['id'] = $request->getAttribute('id');
+
+            $this->service->concludePassword($parameters);
+
+            return $response->withStatus(200);
+
+        } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
     public function create(ServerRequestInterface $request, ResponseInterface $response)
     {
         try {
