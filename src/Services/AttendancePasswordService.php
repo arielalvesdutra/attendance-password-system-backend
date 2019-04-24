@@ -39,6 +39,40 @@ class AttendancePasswordService
         $this->ticketWindowRepository = $windowRepository;
     }
 
+    public function attendPassword(array $parameters)
+    {
+        if (empty($parameters['id']) || empty($parameters['ticketWindowId'])) {
+            throw new InvalidArgumentException(
+                'Parametros necessários não preenchidos.', 400);
+        }
+
+        $passwordEntity = $this->repository->find($parameters['id']);
+
+        $ticketWindowEntity = $this->ticketWindowRepository->find(
+          $parameters['ticketWindowId']
+        );
+
+        $statusEntity = $this->statusRepository->findFirstByCode(
+          Status\InProgressStatus::CODE
+        );
+
+        $passwordEntity->setTicketWindow($ticketWindowEntity);
+        $passwordEntity->setStatus($statusEntity);
+
+        $this->connection->beginTransaction();
+
+        $this->connection->update(
+          $this->repository->getTableName(),
+          [
+              'id_ticket_window' => $passwordEntity->getTicketWindow()->getId(),
+              'id_status' => $passwordEntity->getStatus()->getId()
+          ],
+          [ 'id' => $passwordEntity->getId() ]
+        );
+
+        $this->connection->commit();
+    }
+
     public function createAttendancePassword(array $parameters)
     {
         if (empty($parameters['categoryId'])) {
