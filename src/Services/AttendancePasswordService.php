@@ -73,6 +73,34 @@ class AttendancePasswordService
         $this->connection->commit();
     }
 
+    public function cancelPassword(array $parameters)
+    {
+        if (empty($parameters['id'])) {
+            throw new InvalidArgumentException(
+                'Parametros necessários não preenchidos.', 400);
+        }
+
+        $passwordEntity = $this->repository->find($parameters['id']);
+
+        $statusEntity = $this->statusRepository->findFirstByCode(
+            Status\CanceledStatus::CODE
+        );
+
+        $passwordEntity->setStatus($statusEntity);
+
+        $this->connection->beginTransaction();
+
+        $this->connection->update(
+            $this->repository->getTableName(),
+            [
+                'id_status' => $passwordEntity->getStatus()->getId()
+            ],
+            [ 'id' => $passwordEntity->getId() ]
+        );
+
+        $this->connection->commit();
+    }
+
     public function createAttendancePassword(array $parameters)
     {
         if (empty($parameters['categoryId'])) {
