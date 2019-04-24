@@ -18,6 +18,7 @@ Senha de Atendimento:
 | /attendance-passwords/search/retrieve-awaiting  | GET  | Retorna senhas aguardando atendimento
 | /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna senhas em atendimento
 | /attendance-passwords/{id}/attend-password  | PATCH | Atualiza o status da senha para "Em andamento" e seta um Guichê para a senha
+| /attendance-passwords/{id}/cancel-password  | PATCH | Atualiza o status da senha para "Cancelado"
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:
