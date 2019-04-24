@@ -19,6 +19,7 @@ Senha de Atendimento:
 | /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna senhas em atendimento
 | /attendance-passwords/{id}/attend-password  | PATCH | Atualiza o status da senha para "Em andamento" e seta um Guichê para a senha
 | /attendance-passwords/{id}/cancel-password  | PATCH | Atualiza o status da senha para "Cancelado"
+| /attendance-passwords/{id}/conclude-password  | PATCH | Atualiza o status da senha para "Concluído"
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:
@@ -115,3 +116,11 @@ Senha de Atendimento - /attendance-passwords/1/attend-password
   "ticketWindowId": 2
 }
 ```
+
+Senha de Atendimento - /attendance-passwords/1/cancel-password
+
+`Não precisa de body.`
+
+Senha de Atendimento - /attendance-passwords/1/conclude-password
+
+`Não precisa de body.`

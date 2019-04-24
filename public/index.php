@@ -146,6 +146,8 @@ $slim->patch('/attendance-passwords/{id}/attend-password',
     AttendancePasswordController::class . ":attendPassword");
 $slim->patch('/attendance-passwords/{id}/cancel-password',
     AttendancePasswordController::class . ":cancelPassword");
+$slim->patch('/attendance-passwords/{id}/conclude-password',
+    AttendancePasswordController::class . ":concludePassword");
 $slim->post('/attendance-passwords', AttendancePasswordController::class . ":create");
 
 /**
