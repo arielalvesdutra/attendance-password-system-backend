@@ -45,7 +45,6 @@ class AttendancePasswordRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
         }
 
-
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $categoryEntity = $categoryRepository->find(
             $attendancePasswordRecord['id_category']
@@ -95,36 +94,15 @@ class AttendancePasswordRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
         }
 
-        $attendancePasswordEntities = [];
-
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $ticketWindowRepository =  new TicketWindowRepository($this->connection);
 
-        foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
-            $categoryEntity = $categoryRepository->find(
-                $attendancePasswordRecord['id_category']
-            );
-
-            $statusEntity = $statusRepository->find(
-                $attendancePasswordRecord['id_status']
-            );
-
-            $ticketWindowEntity = null;
-
-            if ($attendancePasswordRecord['id_ticket_window']) {
-                $ticketWindowEntity = $ticketWindowRepository->find(
-                    $attendancePasswordRecord['id_ticket_window']
-                );
-            }
-
-            $attendancePasswordEntities[] = AttendancePasswordEntityFactory::create(
-                $attendancePasswordRecord['name'],
-                $categoryEntity,
-                $statusEntity,
-                $ticketWindowEntity,
-                $attendancePasswordRecord['id'],
-                );
-        }
+        $attendancePasswordEntities = $this->buildAttendancePasswordsEntitiesArrayFromRecordsArray(
+            $attendancePasswordRecords,
+            $categoryRepository,
+            $statusRepository,
+            $ticketWindowRepository
+        );
 
         return $attendancePasswordEntities;
     }
@@ -142,37 +120,16 @@ class AttendancePasswordRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
         }
 
-        $attendancePasswordEntities = [];
-
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $statusRepository = new AttendanceStatusRepository($this->connection);
         $ticketWindowRepository =  new TicketWindowRepository($this->connection);
 
-        foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
-            $categoryEntity = $categoryRepository->find(
-                $attendancePasswordRecord['id_category']
-            );
-
-            $statusEntity = $statusRepository->find(
-                $attendancePasswordRecord['id_status']
-            );
-
-            $ticketWindowEntity = null;
-
-            if ($attendancePasswordRecord['id_ticket_window']) {
-                $ticketWindowEntity = $ticketWindowRepository->find(
-                    $attendancePasswordRecord['id_ticket_window']
-                );
-            }
-
-            $attendancePasswordEntities[] = AttendancePasswordEntityFactory::create(
-                $attendancePasswordRecord['name'],
-                $categoryEntity,
-                $statusEntity,
-                $ticketWindowEntity,
-                $attendancePasswordRecord['id'],
-            );
-        }
+        $attendancePasswordEntities = $this->buildAttendancePasswordsEntitiesArrayFromRecordsArray(
+            $attendancePasswordRecords,
+            $categoryRepository,
+            $statusRepository,
+            $ticketWindowRepository
+        );
 
         return $attendancePasswordEntities;
     }
@@ -194,36 +151,15 @@ class AttendancePasswordRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
         }
 
-        $attendancePasswordEntities = [];
-
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $ticketWindowRepository =  new TicketWindowRepository($this->connection);
 
-        foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
-            $categoryEntity = $categoryRepository->find(
-                $attendancePasswordRecord['id_category']
-            );
-
-            $statusEntity = $statusRepository->find(
-                $attendancePasswordRecord['id_status']
-            );
-
-            $ticketWindowEntity = null;
-
-            if ($attendancePasswordRecord['id_ticket_window']) {
-                $ticketWindowEntity = $ticketWindowRepository->find(
-                    $attendancePasswordRecord['id_ticket_window']
-                );
-            }
-
-            $attendancePasswordEntities[] = AttendancePasswordEntityFactory::create(
-                $attendancePasswordRecord['name'],
-                $categoryEntity,
-                $statusEntity,
-                $ticketWindowEntity,
-                $attendancePasswordRecord['id'],
-                );
-        }
+        $attendancePasswordEntities = $this->buildAttendancePasswordsEntitiesArrayFromRecordsArray(
+            $attendancePasswordRecords,
+            $categoryRepository,
+            $statusRepository,
+            $ticketWindowRepository
+        );
 
         return $attendancePasswordEntities;
     }
@@ -245,10 +181,26 @@ class AttendancePasswordRepository extends AbstractRepository
             throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
         }
 
-        $attendancePasswordEntities = [];
-
         $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
         $ticketWindowRepository =  new TicketWindowRepository($this->connection);
+
+        $attendancePasswordEntities = $this->buildAttendancePasswordsEntitiesArrayFromRecordsArray(
+            $attendancePasswordRecords,
+            $categoryRepository,
+            $statusRepository,
+            $ticketWindowRepository
+        );
+
+        return $attendancePasswordEntities;
+    }
+
+    private function buildAttendancePasswordsEntitiesArrayFromRecordsArray(
+        array $attendancePasswordRecords,
+        AttendancePasswordCategoryRepository $categoryRepository,
+        AttendanceStatusRepository $statusRepository,
+        TicketWindowRepository $ticketWindowRepository
+    ) {
+        $attendancePasswordEntities = [];
 
         foreach ($attendancePasswordRecords as $attendancePasswordRecord) {
             $categoryEntity = $categoryRepository->find(
@@ -273,7 +225,7 @@ class AttendancePasswordRepository extends AbstractRepository
                 $statusEntity,
                 $ticketWindowEntity,
                 $attendancePasswordRecord['id'],
-            );
+                );
         }
 
         return $attendancePasswordEntities;
