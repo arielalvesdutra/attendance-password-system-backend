@@ -194,6 +194,54 @@ class AttendancePasswordRepository extends AbstractRepository
         return $attendancePasswordEntities;
     }
 
+    public function findLastInProgressAttendance()
+    {
+        $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $attendancePasswordRecord = $this->connection->createQueryBuilder()
+            ->select('ap.*')
+            ->from($this->getTableName(), 'ap')
+            ->innerJoin('ap', $statusRepository->getTableName(), 'aps', 'ap.id_status = aps.id')
+            ->where('aps.code = ?')
+            ->setParameter(0, InProgressStatus::CODE)
+            ->orderBy('id', 'DESC')
+            ->execute()
+            ->fetch();
+
+        if (empty($attendancePasswordRecord)) {
+            throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
+        }
+
+        $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
+        $ticketWindowRepository =  new TicketWindowRepository($this->connection);
+
+        $categoryEntity = $categoryRepository->find(
+            $attendancePasswordRecord['id_category']
+        );
+
+        $statusEntity = $statusRepository->find(
+            $attendancePasswordRecord['id_status']
+        );
+
+        $ticketWindowEntity = null;
+
+        if ($attendancePasswordRecord['id_ticket_window']) {
+            $ticketWindowEntity = $ticketWindowRepository->find(
+                $attendancePasswordRecord['id_ticket_window']
+            );
+        }
+
+        $attendancePasswordEntity = AttendancePasswordEntityFactory::create(
+            $attendancePasswordRecord['name'],
+            $categoryEntity,
+            $statusEntity,
+            $ticketWindowEntity,
+            $attendancePasswordRecord['id'],
+        );
+
+        return $attendancePasswordEntity;
+    }
+
     private function buildAttendancePasswordsEntitiesArrayFromRecordsArray(
         array $attendancePasswordRecords,
         AttendancePasswordCategoryRepository $categoryRepository,
