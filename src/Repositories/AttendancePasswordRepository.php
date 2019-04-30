@@ -278,6 +278,4 @@ class AttendancePasswordRepository extends AbstractRepository
 
         return $attendancePasswordEntities;
     }
-
-
 }
