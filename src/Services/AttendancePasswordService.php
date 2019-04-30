@@ -223,8 +223,8 @@ class AttendancePasswordService
 
     public function retrieveLastInProgressAttendance()
     {
-        $passwordsEntities = $this->repository->findLastInProgressAttendance();
+        $passwordsEntity = $this->repository->findLastInProgressAttendance();
 
-        return Formatter::fromObjectToArray($passwordsEntities);
+        return Formatter::fromObjectToArray($passwordsEntity);
     }
 }

@@ -111,10 +111,10 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendanceCategories =
+            $attendancePasswords =
                 $this->service->retrieve10LastFinishedAttendances();
 
-            return $response->withJson($attendanceCategories, 200);
+            return $response->withJson($attendancePasswords, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
@@ -125,9 +125,9 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendanceCategories = $this->service->retrieveAllAttendancePasswords();
+            $attendancePasswords = $this->service->retrieveAllAttendancePasswords();
 
-            return $response->withJson($attendanceCategories, 200);
+            return $response->withJson($attendancePasswords, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
@@ -138,9 +138,9 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendanceCategories = $this->service->retrieveAwaitingAttendances();
+            $attendancePasswords = $this->service->retrieveAwaitingAttendances();
 
-            return $response->withJson($attendanceCategories, 200);
+            return $response->withJson($attendancePasswords, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
@@ -151,9 +151,9 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendanceCategories = $this->service->retrieveInProgressAttendances();
+            $attendancePasswords = $this->service->retrieveInProgressAttendances();
 
-            return $response->withJson($attendanceCategories, 200);
+            return $response->withJson($attendancePasswords, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
@@ -164,9 +164,9 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendanceCategories = $this->service->retrieveLastInProgressAttendance();
+            $attendancePassword = $this->service->retrieveLastInProgressAttendance();
 
-            return $response->withJson($attendanceCategories, 200);
+            return $response->withJson($attendancePassword, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
