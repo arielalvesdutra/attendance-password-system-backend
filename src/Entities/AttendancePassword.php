@@ -2,12 +2,15 @@
 
 namespace App\Entities;
 
+use DateTime;
 use Exception;
 use InvalidArgumentException;
 
 class AttendancePassword extends Entity
 {
     protected $category;
+
+    protected $creationDate;
 
     protected $name;
 
@@ -22,7 +25,16 @@ class AttendancePassword extends Entity
             return $this->category;
         }
 
-        throw new Exception('Parametro categoria inválido.');
+        throw new Exception('O atributo categoria está vazio.');
+    }
+
+    public function getCreationDate(): DateTime
+    {
+        if (!empty($this->creationDate)) {
+            return $this->creationDate;
+        }
+
+        throw new Exception('O atribuo data de criação está vazio.');
     }
 
     public function getName(): string
@@ -58,6 +70,12 @@ class AttendancePassword extends Entity
     public function setCategory(AttendancePasswordCategory $category)
     {
         $this->category = $category;
+        return $this;
+    }
+
+    public function setCreationDate(DateTime $creationDate)
+    {
+        $this->creationDate = $creationDate;
         return $this;
     }
 

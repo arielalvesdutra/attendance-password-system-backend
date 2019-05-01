@@ -156,7 +156,8 @@ class AttendancePasswordService
             [
                 'name' => $passwordEntity->getName(),
                 'id_category' => $passwordEntity->getCategory()->getId(),
-                'id_status' => $passwordEntity->getStatus()->getId()
+                'id_status' => $passwordEntity->getStatus()->getId(),
+                'creation_date' => $passwordEntity->getCreationDate()->format('Y-m-d H:i:s O')
             ]
         );
 

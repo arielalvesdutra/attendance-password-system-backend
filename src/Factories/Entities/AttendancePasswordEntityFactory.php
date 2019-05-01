@@ -8,6 +8,8 @@ use App\Entities\AttendanceStatus;
 use App\Entities\TicketWindow;
 use App\Strategies\AttendancePasswordStrategy;
 
+use DateTime;
+
 class AttendancePasswordEntityFactory
 {
 
@@ -38,9 +40,12 @@ class AttendancePasswordEntityFactory
                     ++$amountOfPasswordsByCategory
                 );
 
+        $creationDate = new DateTime();
+
         return (new AttendancePassword())
             ->setName($name)
             ->setCategory($category)
-            ->setStatus($status);
+            ->setStatus($status)
+            ->setCreationDate($creationDate);
     }
 }

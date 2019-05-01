@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS attendance_passwords (
     id_category INT(4) NOT NULL,
     id_ticket_window INT(4),
     id_status INT(4) NOT NULL,
+    creation_date VARCHAR(26),
     PRIMARY KEY (id),
     FOREIGN KEY (id_category)
         REFERENCES attendance_password_categories (id),

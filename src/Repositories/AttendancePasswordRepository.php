@@ -204,7 +204,7 @@ class AttendancePasswordRepository extends AbstractRepository
             ->innerJoin('ap', $statusRepository->getTableName(), 'aps', 'ap.id_status = aps.id')
             ->where('aps.code = ?')
             ->setParameter(0, InProgressStatus::CODE)
-            ->orderBy('id', 'DESC')
+            ->orderBy('creation_date', 'DESC')
             ->execute()
             ->fetch();
 
