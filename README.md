@@ -62,6 +62,11 @@ Usuário:
 | /users | POST | Cria um Usuário
 | /users/{id} | PUT | Atualiza um Usuário pelo ID
 
+Auth:
+
+| URL  | Tipo |  Descrição |
+| ---- | ---- |---- |
+| /signin | POST | Retorna token JWT de autenticação
 
 ### Exemplos de uso dos métodos POST
 
@@ -104,6 +109,15 @@ Usuário - /users
 ```json
 {
   "name" : "Night King",
+  "email": "night.king@whitewalkers.com",
+  "password": "brandonstark"
+}
+```
+
+Auth - /signin
+
+```json
+{
   "email": "night.king@whitewalkers.com",
   "password": "brandonstark"
 }

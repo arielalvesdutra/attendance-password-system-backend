@@ -5,9 +5,11 @@ require '../bootstrap.php';
 use App\Controllers\AttendancePasswordController;
 use App\Controllers\AttendancePasswordCategoryController;
 use App\Controllers\AttendanceStatusController;
+use App\Controllers\AuthController;
 use App\Controllers\TicketWindowController;
 use App\Controllers\UserController;
 use App\Middlewares\AccessControlAllow;
+use App\Middlewares\Auth;
 use Slim\App;
 use Slim\Container;
 
@@ -81,6 +83,21 @@ $container[AttendanceStatusController::class] = function ($container)
         new \App\Services\AttendanceStatusService(
             $container['Connection'],
             new \App\Repositories\AttendanceStatusRepository($container['Connection'])
+        )
+    );
+};
+
+/**
+ * Injeta AuthController
+ * @param $container
+ * @return AuthController
+ */
+$container[AuthController::class] = function ($container)
+{
+    return new \App\Controllers\AuthController(
+        new \App\Services\UserService(
+            $container['Connection'],
+            new \App\Repositories\UserRepository($container['Connection'])
         )
     );
 };
@@ -185,6 +202,10 @@ $slim->get('/attendance-status/{id}', AttendanceStatusController::class . ":retr
 $slim->post('/attendance-status', AttendanceStatusController::class . ":create");
 $slim->put('/attendance-status/{id}', AttendanceStatusController::class . ":update");
 
+/**
+ * Auth
+ */
+$slim->post('/signin', AuthController::class . ':signIn');
 /**
  * TicketWindow
  */

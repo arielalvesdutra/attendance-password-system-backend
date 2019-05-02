@@ -92,6 +92,13 @@ class UserService
 
         $this->connection->commit();
     }
+    public function retrieveAllUsers()
+    {
+        $userEntities = $this->repository->findAll();
+
+        return Formatter::fromObjectToArray($userEntities);
+    }
+
 
     public function retrieveUser(array $parameters)
     {
@@ -105,11 +112,19 @@ class UserService
         return Formatter::fromObjectToArray($userEntity);
     }
 
-    public function retrieveAllUsers()
+    public function retrieveUserByEmailAndPassword(array $parameters)
     {
-        $userEntities = $this->repository->findAll();
+        if (empty($parameters['email']) || empty($parameters['password'])) {
+            throw new InvalidArgumentException(
+                'Parametros necessários não preenchidos.', 400);
+        }
 
-        return Formatter::fromObjectToArray($userEntities);
+        $userEntity = $this->repository->findByEmailAndPassword(
+            $parameters['email'],
+            $parameters['password']
+        );
+
+        return Formatter::fromObjectToArray($userEntity);
     }
 
     public function updateUser(array $parameters)
