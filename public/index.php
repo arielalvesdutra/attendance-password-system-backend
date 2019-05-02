@@ -6,6 +6,7 @@ use App\Controllers\AttendancePasswordController;
 use App\Controllers\AttendancePasswordCategoryController;
 use App\Controllers\AttendanceStatusController;
 use App\Controllers\TicketWindowController;
+use App\Controllers\UserController;
 use App\Middlewares\AccessControlAllow;
 use Slim\App;
 use Slim\Container;
@@ -100,6 +101,21 @@ $container[TicketWindowController::class] = function ($container)
 };
 
 /**
+ * Injeta UserController
+ * @param $container
+ * @return UserController
+ */
+$container[UserController::class] = function ($container)
+{
+    return new \App\Controllers\UserController(
+        new \App\Services\UserService(
+            $container['Connection'],
+            new \App\Repositories\UserRepository($container['Connection'])
+        )
+    );
+};
+
+/**
  * Define configuração de middleware e de debug
  */
 $container->get('settings')
@@ -176,5 +192,14 @@ $slim->delete('/ticket-window/{id}', TicketWindowController::class . ":delete");
 $slim->get('/ticket-window/{id}', TicketWindowController::class . ":retrieve");
 $slim->get('/ticket-window', TicketWindowController::class . ":retrieveAll");
 $slim->post('/ticket-window', TicketWindowController::class . ":create");
+
+/**
+ * Users
+ */
+$slim->delete('/users/{id}', UserController::class . ':delete');
+$slim->get('/users', UserController::class . ':retrieveAll');
+$slim->get('/users/{id}', UserController::class . ':retrieve');
+$slim->post('/users', UserController::class . ':create');
+$slim->put('/users/{id}', UserController::class . ':update');
 
 $slim->run();
