@@ -19,3 +19,18 @@ function debugd()
     echo '</pre>';
     die();
 }
+
+/**
+ * Método para setar os valores do arquivo .env na execução do PHP
+ */
+function setOnExecutionTimeEnvFileValues()
+{
+
+    $envFileValues = parse_ini_file('.env');
+
+    foreach ($envFileValues as $key => $envFileValue) {
+        $_ENV[$key] = $envFileValue;
+    }
+}
+
+setOnExecutionTimeEnvFileValues();

@@ -81,4 +81,30 @@ class UserRepository extends AbstractRepository
 
         return $userEntity;
     }
+
+    public function findByEmailAndPassword(string $email, string $password)
+    {
+        $userRecord = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from($this->getTableName(), 'u')
+            ->where( "u.email = :email")
+            ->setParameter(':email', $email)
+            ->andWhere('u.password = :password')
+            ->setParameter(':password', $password)
+            ->execute()
+            ->fetch();
+
+        if (empty($userRecord)) {
+            throw new NotFoundException('Nenhum registro de guiche encontrado');
+        }
+
+        $userEntity = UserEntityFactory::create(
+            $userRecord['name'],
+            $userRecord['email'],
+            $userRecord['password'],
+            $userRecord['id']
+        );
+
+        return $userEntity;
+    }
 }
