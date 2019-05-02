@@ -31,9 +31,17 @@ CREATE TABLE IF NOT EXISTS attendance_passwords (
     creation_date VARCHAR(26),
     PRIMARY KEY (id),
     FOREIGN KEY (id_category)
-        REFERENCES attendance_password_categories (id),
+        REFERENCES attendance_password_categories (id) ON DELETE CASCADE,
     FOREIGN KEY (id_ticket_window)
         REFERENCES ticket_window (id),
     FOREIGN KEY (id_status)
         REFERENCES attendance_password_status (id)
 )  ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  name VARCHAR(60) NOT NULL,
+  email VARCHAR(60) NOT NULL UNIQUE,
+  password VARCHAR (40) NOT NULL,
+  PRIMARY KEY (id)
+)engine=InnoDB;

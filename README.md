@@ -52,6 +52,17 @@ Guichê:
 | /ticket-window/{id}  | GET | Retorna um Guichê pelo ID
 | /ticket-window  | POST | Cria um Guichê
 
+Usuário:
+
+| URL  | Tipo |  Descrição |
+| ---- | ---- |---- |
+| /users/{id} | DELETE | Remove um Usuário pelo ID
+| /users | GET | Retorna todos os Usuários
+| /users/{id} | GET | Retorna um Usuário pelo ID
+| /users | POST | Cria um Usuário
+| /users/{id} | PUT | Atualiza um Usuário pelo ID
+
+
 ### Exemplos de uso dos métodos POST
 
 Senha de atendimento - /attendance-passwords:
@@ -88,6 +99,16 @@ Guichê - /ticket-window
 }
 ```
 
+Usuário - /users
+
+```json
+{
+  "name" : "Night King",
+  "email": "night.king@whitewalkers.com",
+  "password": "brandonstark"
+}
+```
+
 ### Exemplos de uso dos métodos PUT
 
 Categoria de Senha de Atendimento - /attendance-categories/1:
@@ -105,6 +126,15 @@ Status de Senha de Atendimento - /attendance-status/1:
 {
   "name" : "Aguardando Gerente",
   "code" : "AWAITING_MANAGER"
+}
+```
+
+Usuário - /users/1
+
+```json
+{
+  "name" : "Night King",
+  "password": "brandonstark"
 }
 ```
 
