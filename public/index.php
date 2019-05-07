@@ -28,12 +28,12 @@ $container['Connection'] = function () {
     $config = new \Doctrine\DBAL\Configuration();
 
     $connectionParameters = [
-        'user' => 'root',
-        'host' => '192.168.11.101',
+        'user' => $_ENV['MYSQL_USER'],
+        'host' => $_ENV['MYSQL_HOST'],
         'driver' => 'pdo_mysql',
-        'password' => 'password',
-        'port' => '3601',
-        'dbname' => 'aps'
+        'password' => $_ENV['MYSQL_PASSWORD'],
+        'port' => $_ENV['MYSQL_PORT'],
+        'dbname' => $_ENV['MYSQL_DATABASE']
     ];
 
     return \Doctrine\DBAL\DriverManager::getConnection($connectionParameters, $config);

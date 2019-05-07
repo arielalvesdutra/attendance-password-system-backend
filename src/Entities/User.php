@@ -10,11 +10,18 @@ class User extends Entity
     const EMAIL_REGEX =
         "/^([a-z0-9.]{1,})([@])([a-z0-9]{1,})([.])([a-z0-9.]{1,})([a-z]{1})$/";
 
+    protected $admin = false;
+
     protected $email;
 
     protected $name;
 
     protected $password;
+
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
 
     public function getEmail()
     {
@@ -44,6 +51,12 @@ class User extends Entity
         }
 
         throw new Exception('O atributo senha está vazio.');
+    }
+
+    public function setAdmin(bool $isAdmin)
+    {
+        $this->admin = $isAdmin;
+        return $this;
     }
 
     public function setEmail(string $email)

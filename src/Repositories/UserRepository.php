@@ -32,6 +32,7 @@ class UserRepository extends AbstractRepository
             $userRecord['name'],
             $userRecord['email'],
             $userRecord['password'],
+            $userRecord['admin'],
             $userRecord['id']
         );
 
@@ -76,6 +77,7 @@ class UserRepository extends AbstractRepository
           $userRecord['name'],
           $userRecord['email'],
           $userRecord['password'],
+          $userRecord['admin'],
           $userRecord['id']
         );
 
@@ -102,6 +104,7 @@ class UserRepository extends AbstractRepository
             $userRecord['name'],
             $userRecord['email'],
             $userRecord['password'],
+            $userRecord['admin'],
             $userRecord['id']
         );
 
