@@ -43,5 +43,6 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(60) NOT NULL,
   email VARCHAR(60) NOT NULL UNIQUE,
   password VARCHAR (40) NOT NULL,
+  admin BOOL DEFAULT false,
   PRIMARY KEY (id)
 )engine=InnoDB;

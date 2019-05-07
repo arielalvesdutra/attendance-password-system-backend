@@ -8,13 +8,14 @@ class UserEntityFactory
 {
 
     public static function create(string $name, string $email, string $password,
-                                  int $id = null): User
+                                  $admin = false, int $id = null): User
     {
 
         return (new User($id))
             ->setName($name)
             ->setEmail($email)
-            ->setPassword($password);
+            ->setPassword($password)
+            ->setAdmin($admin);
     }
 
     public static function createFromFetchAllArray(array $records): array
@@ -26,6 +27,7 @@ class UserEntityFactory
                 $record['name'],
                 $record['email'],
                 $record['password'],
+                $record['admin'],
                 $record['id']
             );
         }
