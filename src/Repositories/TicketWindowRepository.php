@@ -72,4 +72,28 @@ class TicketWindowRepository extends AbstractRepository
 
         return $ticketEntities;
     }
+
+    public function findNotIn(array $ids)
+    {
+        $ticketWindowRecords = $this->connection->createQueryBuilder()
+            ->select("*")
+            ->from($this->getTableName(), 'tw')
+            ->where(
+                $this->connection->createQueryBuilder()->expr()->notIn(
+                    'tw.id', $ids
+                )
+            )
+            ->orderBy('tw.name')
+            ->execute()
+            ->fetchAll();
+
+        if (empty($ticketWindowRecords)) {
+            throw new NotFoundException('Nenhum registro de guiche encontrado');
+        }
+
+        $ticketWindowEntities =
+            TicketWindowEntityFactory::createFromFetchAllArray($ticketWindowRecords);
+
+        return $ticketWindowEntities;
+    }
 }
