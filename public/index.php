@@ -236,6 +236,8 @@ $slim->post('/ticket-window', TicketWindowController::class . ":create");
 /**
  * TicketWindowUse
  */
+$slim->get('/ticket-window-use/retrieve-user-ticket-window/{id}',
+    TicketWindowUseController::class . ':retrieveUserTicketWindow');
 $slim->get('/ticket-window-use/retrieve-unused-ticket-window',
     TicketWindowUseController::class . ':retrieveUnused');
 $slim->post('/ticket-window-use/release',

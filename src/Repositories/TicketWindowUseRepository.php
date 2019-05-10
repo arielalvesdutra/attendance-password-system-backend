@@ -16,7 +16,7 @@ class TicketWindowUseRepository extends AbstractRepository
 
     protected $tableName = 'ticket_window_use';
 
-    public function retrieveUnusedTicketWindow()
+    public function findUnusedTicketWindow()
     {
         $usedTicketWindowIds = $this->connection->createQueryBuilder()
             ->select("id_ticket_window")
@@ -25,6 +25,13 @@ class TicketWindowUseRepository extends AbstractRepository
             ->fetchAll(FetchMode::COLUMN);
 
         $ticketWindowRepository = new TicketWindowRepository($this->connection);
+
+        if (empty($usedTicketWindowIds)) {
+
+            $unusedTicketWindow = $ticketWindowRepository->findAll();
+
+            return $unusedTicketWindow;
+        }
 
         $unusedTicketWindow = $ticketWindowRepository->findNotIn(
             $usedTicketWindowIds
@@ -62,5 +69,28 @@ class TicketWindowUseRepository extends AbstractRepository
         );
 
         return $userEntity;
+    }
+
+    public function findUserTicketWindow(int $userId)
+    {
+        $ticketWindowUseRecord = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from($this->getTableName(), 'twu')
+            ->where( "twu.id_user = :id_user")
+            ->setParameter(':id_user', $userId)
+            ->execute()
+            ->fetch();
+
+        if (empty($ticketWindowUseRecord)) {
+            throw new NotFoundException('Nenhum registro de uso de guichê encontrado');
+        }
+
+        $ticketWindowRepository = new TicketWindowRepository($this->connection);
+
+        $userTicketWindowEntity = $ticketWindowRepository->find(
+            $ticketWindowUseRecord['id_ticket_window']
+        );
+
+        return $userTicketWindowEntity;
     }
 }

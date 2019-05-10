@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Services\TicketWindowUseService;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -52,7 +53,32 @@ class TicketWindowUseController extends AbstractController
 
             return $response->withJson($unusedTicketWindow,200);
 
+        } catch (NotFoundException $notFoundException) {
+            return $response->withJson([], 200);
+
         } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function retrieveUserTicketWindow(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ){
+
+        try {
+
+            $parameters['id_user'] = $request->getAttribute('id');
+
+            $unusedTicketWindow = $this->service->retrieveUserTicketWindow($parameters);
+
+            return $response->withJson($unusedTicketWindow,200);
+
+        } catch (NotFoundException $notFoundException) {
+
+            return $response->withJson($notFoundException->getMessage(), $notFoundException->getCode());
+        } catch (Exception $exception) {
+
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }

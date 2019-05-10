@@ -52,6 +52,15 @@ Guichê:
 | /ticket-window/{id}  | GET | Retorna um Guichê pelo ID
 | /ticket-window  | POST | Cria um Guichê
 
+Uso do Guichê:
+
+| URL  | Tipo |  Descrição |
+| ---- | ---- |---- |
+| /ticket-window-use/retrieve-user-ticket-window/{id}  | GET | Retorna Guichê em uso pelo usuário ou status 404
+| /ticket-window-use/use  | POST | Usuário reserva um Guichê para uso
+| /ticket-window-use/relese | POST | Usuário libera um Guichê para uso
+| /ticket-window-use/retrive-unused-ticket-window | POST | Retorna Guichê que não estão sendo utilizados.
+
 Usuário:
 
 | URL  | Tipo |  Descrição |
@@ -101,6 +110,23 @@ Guichê - /ticket-window
 ```json
 {
   "name" : "CAIXA - 001"
+}
+```
+Uso do Guichê - /ticket-window-use/use
+
+```json
+{
+  "userId": 1,
+  "ticketWindowId": 1
+}
+```
+
+Uso do Guichê - /ticket-window-use/release
+
+```json
+{
+  "userId": 1,
+  "ticketWindowId": 1
 }
 ```
 

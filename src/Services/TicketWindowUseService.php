@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Entities\TicketWindowUse;
 use App\Exceptions\NotFoundException;
 use App\Formatters\Formatter;
 use App\Repositories\TicketWindowRepository;
@@ -107,7 +106,20 @@ class TicketWindowUseService
 
     public function retrieveUnusedTicketWindow()
     {
-        $unusedTicketWindow = $this->repository->retrieveUnusedTicketWindow();
+        $unusedTicketWindow = $this->repository->findUnusedTicketWindow();
+
+        return  Formatter::fromObjectToArray($unusedTicketWindow);
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     *
+     * @throws NotFoundException
+     */
+    public function retrieveUserTicketWindow(array $parameters)
+    {
+        $unusedTicketWindow = $this->repository->findUserTicketWindow($parameters['id_user']);
 
         return  Formatter::fromObjectToArray($unusedTicketWindow);
     }
