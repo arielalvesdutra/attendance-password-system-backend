@@ -46,3 +46,11 @@ CREATE TABLE IF NOT EXISTS users (
   admin BOOL DEFAULT false,
   PRIMARY KEY (id)
 )engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS ticket_window_use (
+  id_user INT NOT NULL UNIQUE,
+  id_ticket_window INT NOT NULL UNIQUE,
+  PRIMARY KEY (id_user, id_ticket_window),
+  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (id_ticket_window) ticket_window(id) ON DELETE CASCADE
+)engine=InnoDB;

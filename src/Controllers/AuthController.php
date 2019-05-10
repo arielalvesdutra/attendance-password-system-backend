@@ -47,11 +47,11 @@ class AuthController extends AbstractController
 
         } catch (NotFoundException $notFoundException) {
 
-            return $response->withJson('Email ou senha inválido!', 400);
+            return $response->withJson('Email ou senha inválido!', 404);
 
         } catch (Exception $exception) {
 
-            return $response->withJson($exception->getMessage(), 400);
+            return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }
 }

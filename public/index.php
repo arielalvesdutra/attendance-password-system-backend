@@ -7,6 +7,7 @@ use App\Controllers\AttendancePasswordCategoryController;
 use App\Controllers\AttendanceStatusController;
 use App\Controllers\AuthController;
 use App\Controllers\TicketWindowController;
+use App\Controllers\TicketWindowUseController;
 use App\Controllers\UserController;
 use App\Middlewares\AccessControlAllow;
 use App\Middlewares\Auth;
@@ -118,6 +119,23 @@ $container[TicketWindowController::class] = function ($container)
 };
 
 /**
+ * Injeta TicketWindowUseController
+ * @param $container
+ * @return TicketWindowUseController
+ */
+$container[TicketWindowUseController::class] = function ($container)
+{
+    return new \App\Controllers\TicketWindowUseController(
+        new \App\Services\TicketWindowUseService(
+            $container['Connection'],
+            new \App\Repositories\TicketWindowUseRepository($container['Connection']),
+            new \App\Repositories\TicketWindowRepository($container['Connection']),
+            new \App\Repositories\UserRepository($container['Connection'])
+        )
+    );
+};
+
+/**
  * Injeta UserController
  * @param $container
  * @return UserController
@@ -206,6 +224,7 @@ $slim->put('/attendance-status/{id}', AttendanceStatusController::class . ":upda
  * Auth
  */
 $slim->post('/signin', AuthController::class . ':signIn');
+
 /**
  * TicketWindow
  */
@@ -213,6 +232,15 @@ $slim->delete('/ticket-window/{id}', TicketWindowController::class . ":delete");
 $slim->get('/ticket-window/{id}', TicketWindowController::class . ":retrieve");
 $slim->get('/ticket-window', TicketWindowController::class . ":retrieveAll");
 $slim->post('/ticket-window', TicketWindowController::class . ":create");
+
+/**
+ * TicketWindowUse
+ */
+$slim->get('/ticket-window-use/retrieve-unused-ticket-window',
+    TicketWindowUseController::class . ':retrieveUnused');
+$slim->post('/ticket-window-use/release',
+    TicketWindowUseController::class . ':release');
+$slim->post('/ticket-window-use/use', TicketWindowUseController::class . ':use');
 
 /**
  * Users
