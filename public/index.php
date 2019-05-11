@@ -53,7 +53,9 @@ $container[AttendancePasswordController::class] = function ($container)
             new \App\Repositories\AttendancePasswordRepository($container['Connection']),
             new \App\Repositories\AttendancePasswordCategoryRepository($container['Connection']),
             new \App\Repositories\AttendanceStatusRepository($container['Connection']),
-            new \App\Repositories\TicketWindowRepository($container['Connection'])
+            new \App\Repositories\TicketWindowRepository($container['Connection']),
+            new \App\Repositories\UserRepository($container['Connection'])
+
         )
     );
 };
@@ -203,11 +205,13 @@ $slim->get('/attendance-passwords/search/retrieve-in-progress',
     AttendancePasswordController::class . ":retrieveInProgress");
 $slim->get('/attendance-passwords/search/retrieve-last-in-progress',
     AttendancePasswordController::class . ":retrieveLastInProgress");
-$slim->patch('/attendance-passwords/{id}/attend-password',
+$slim->get('/attendance-passwords/users/{id}/retrieve-in-progress',
+    AttendancePasswordController::class . ":retrieveInProgressUserAttendance");
+$slim->patch('/attendance-passwords/actions/attend-password',
     AttendancePasswordController::class . ":attendPassword");
-$slim->patch('/attendance-passwords/{id}/cancel-password',
+$slim->patch('/attendance-passwords/actions/{id}/cancel-password',
     AttendancePasswordController::class . ":cancelPassword");
-$slim->patch('/attendance-passwords/{id}/conclude-password',
+$slim->patch('/attendance-passwords/actions/{id}/conclude-password',
     AttendancePasswordController::class . ":concludePassword");
 $slim->post('/attendance-passwords', AttendancePasswordController::class . ":create");
 
