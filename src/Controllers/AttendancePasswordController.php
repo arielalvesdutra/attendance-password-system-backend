@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Services\AttendancePasswordService;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -19,11 +20,10 @@ class AttendancePasswordController extends AbstractController
         try {
 
             $parameters = $request->getParsedBody();
-            $parameters['id'] = $request->getAttribute('id');
 
-            $this->service->attendPassword($parameters);
+            $attendancePassword = $this->service->attendPassword($parameters);
 
-            return $response->withStatus(200);
+            return $response->withJson($attendancePassword, 200);
 
         } catch (Exception $exception) {
             return $response->withJson($exception->getMessage(), $exception->getCode());
@@ -156,6 +156,28 @@ class AttendancePasswordController extends AbstractController
             return $response->withJson($attendancePasswords, 200);
 
         } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+
+    public function retrieveInProgressUserAttendance(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ) {
+        try {
+
+            $parameters['id'] = $request->getAttribute('id');
+
+            $attendancePasswords = $this->service->retrieveInProgressUserAttendance($parameters);
+
+            return $response->withJson($attendancePasswords, 200);
+
+        } catch (NotFoundException $notFoundException) {
+
+            return $response->withJson([], 200);
+        } catch (Exception $exception) {
+
             return $response->withJson($exception->getMessage(), $exception->getCode());
         }
     }

@@ -18,6 +18,8 @@ class AttendancePassword extends Entity
 
     protected $ticketWindow;
 
+    protected $user;
+
     public function getCategory(): AttendancePasswordCategory
     {
         if (!empty($this->category)) {
@@ -67,6 +69,15 @@ class AttendancePassword extends Entity
         throw new Exception('O atributo guichê está vazio.');
     }
 
+    public function getUser(): User
+    {
+        if (!empty($this->user)) {
+            return $this->user;
+        }
+
+        throw new Exception('O atributo usuário está vazio.');
+    }
+
     public function setCategory(AttendancePasswordCategory $category)
     {
         $this->category = $category;
@@ -98,6 +109,12 @@ class AttendancePassword extends Entity
     public function setTicketWindow(TicketWindow $ticketWindow)
     {
         $this->ticketWindow = $ticketWindow;
+        return $this;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
         return $this;
     }
 }

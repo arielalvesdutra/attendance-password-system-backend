@@ -18,9 +18,10 @@ Senha de Atendimento:
 | /attendance-passwords/search/retrieve-awaiting  | GET  | Retorna senhas aguardando atendimento
 | /attendance-passwords/search/retrieve-in-progress  | GET  | Retorna senhas em atendimento
 | /attendance-passwords/search/retrieve-last-in-progress  | GET  | Retorna última senha a ser atendinda
-| /attendance-passwords/{id}/attend-password  | PATCH | Atualiza o status da senha para "Em andamento" e seta um Guichê para a senha
-| /attendance-passwords/{id}/cancel-password  | PATCH | Atualiza o status da senha para "Cancelado"
-| /attendance-passwords/{id}/conclude-password  | PATCH | Atualiza o status da senha para "Concluído"
+| /attendance-passwords/users/{id}/retrieve-in-progress | GET  | Retorna o atendimento em andamento pelo usuário, caso ele possua um
+| /attendance-passwords/actions/attend-password  | PATCH | Atualiza o status da senha para "Em andamento", seta um Guichê e um Usuário para a senha
+| /attendance-passwords/actions/{id}/cancel-password  | PATCH | Atualiza o status da senha para "Cancelado"
+| /attendance-passwords/actions/{id}/conclude-password  | PATCH | Atualiza o status da senha para "Concluído"
 | /attendance-passwords  | POST | Criar uma Senha de Atendimento
 
 Categoria de Senha de Atendimento:
@@ -56,10 +57,10 @@ Uso do Guichê:
 
 | URL  | Tipo |  Descrição |
 | ---- | ---- |---- |
-| /ticket-window-use/retrieve-user-ticket-window/{id}  | GET | Retorna Guichê em uso pelo usuário ou status 404
+| /ticket-window-use/retrieve-user-ticket-window/{id}  | GET | Retorna Guichê em uso pelo usuário ou array vazio
 | /ticket-window-use/use  | POST | Usuário reserva um Guichê para uso
 | /ticket-window-use/relese | POST | Usuário libera um Guichê para uso
-| /ticket-window-use/retrive-unused-ticket-window | POST | Retorna Guichê que não estão sendo utilizados.
+| /ticket-window-use/retrive-unused-ticket-window | POST | Retorna Guichês que não estão sendo utilizados.
 
 Usuário:
 
@@ -180,18 +181,19 @@ Usuário - /users/1
 
 ### Exemplos de uso dos métodos PATCH
 
-Senha de Atendimento - /attendance-passwords/1/attend-password
+Senha de Atendimento - /attendance-passwords/actions/attend-password
 
 ```json
 {
-  "ticketWindowId": 2
+  "ticketWindowId": 2,
+  "userId": 1
 }
 ```
 
-Senha de Atendimento - /attendance-passwords/1/cancel-password
+Senha de Atendimento - /attendance-passwords/actions/1/cancel-password
 
 `Não precisa de body.`
 
-Senha de Atendimento - /attendance-passwords/1/conclude-password
+Senha de Atendimento - /attendance-passwords/actions/1/conclude-password
 
 `Não precisa de body.`

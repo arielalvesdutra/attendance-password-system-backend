@@ -10,7 +10,9 @@ use App\Repositories\AttendancePasswordRepository;
 use App\Repositories\AttendancePasswordCategoryRepository;
 use App\Repositories\AttendanceStatusRepository;
 use App\Repositories\TicketWindowRepository;
+use App\Repositories\UserRepository;
 use Doctrine\DBAL\Connection;
+use DomainException;
 use Exception;
 use InvalidArgumentException;
 
@@ -26,51 +28,76 @@ class AttendancePasswordService
 
     protected $ticketWindowRepository;
 
+    protected $userRepository;
+
     public function __construct(Connection $connection,
                                 AttendancePasswordRepository $repository,
                                 AttendancePasswordCategoryRepository $categoryRepository,
                                 AttendanceStatusRepository $statusRepository,
-                                TicketWindowRepository $windowRepository)
+                                TicketWindowRepository $windowRepository,
+                                UserRepository $userRepository)
     {
         $this->connection = $connection;
         $this->repository = $repository;
         $this->categoryRepository = $categoryRepository;
         $this->statusRepository = $statusRepository;
         $this->ticketWindowRepository = $windowRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function attendPassword(array $parameters)
     {
-        if (empty($parameters['id']) || empty($parameters['ticketWindowId'])) {
+        if (empty($parameters['userId']) || empty($parameters['ticketWindowId'])) {
             throw new InvalidArgumentException(
                 'Parametros necessários não preenchidos.', 400);
         }
 
-        $passwordEntity = $this->repository->find($parameters['id']);
+        $userEntity = $this->userRepository->find($parameters['userId']);
 
-        $ticketWindowEntity = $this->ticketWindowRepository->find(
-          $parameters['ticketWindowId']
-        );
+        try {
 
-        $statusEntity = $this->statusRepository->findFirstByCode(
-          Status\InProgressStatus::CODE
-        );
+            $fetchCurrentAttendance = $this->repository->findInProgressAttendanceByUserId(
+                $userEntity->getId()
+            );
 
-        $passwordEntity->setTicketWindow($ticketWindowEntity);
-        $passwordEntity->setStatus($statusEntity);
+            if (!empty($fetchCurrentAttendance)) {
+                throw new DomainException(
+                    'O usuário já possui um atendimento em andamento.', 400);
+            }
 
-        $this->connection->beginTransaction();
+        } catch (NotFoundException $notFoundException) {
 
-        $this->connection->update(
-          $this->repository->getTableName(),
-          [
-              'id_ticket_window' => $passwordEntity->getTicketWindow()->getId(),
-              'id_status' => $passwordEntity->getStatus()->getId()
-          ],
-          [ 'id' => $passwordEntity->getId() ]
-        );
+            $passwordEntity = $this->repository->findFirstAwaitingAttendance();
 
-        $this->connection->commit();
+            $ticketWindowEntity = $this->ticketWindowRepository->find(
+                $parameters['ticketWindowId']
+            );
+
+            $statusEntity = $this->statusRepository->findFirstByCode(
+                Status\InProgressStatus::CODE
+            );
+
+            $passwordEntity->setTicketWindow($ticketWindowEntity);
+            $passwordEntity->setStatus($statusEntity);
+
+            $passwordEntity->setUser($userEntity);
+
+            $this->connection->beginTransaction();
+
+            $this->connection->update(
+                $this->repository->getTableName(),
+                [
+                    'id_ticket_window' => $passwordEntity->getTicketWindow()->getId(),
+                    'id_status' => $passwordEntity->getStatus()->getId(),
+                    'id_user' => $userEntity->getId()
+                ],
+                [ 'id' => $passwordEntity->getId() ]
+            );
+
+            $this->connection->commit();
+
+            return Formatter::fromObjectToArray($passwordEntity);
+        }
     }
 
     public function cancelPassword(array $parameters)
@@ -218,6 +245,18 @@ class AttendancePasswordService
     public function retrieveInProgressAttendances()
     {
         $passwordsEntities = $this->repository->findInProgressAttendances();
+
+        return Formatter::fromObjectToArray($passwordsEntities);
+    }
+
+    public function retrieveInProgressUserAttendance(array $parameters)
+    {
+        if (empty($parameters['id'])) {
+            throw new InvalidArgumentException(
+                "Parametros necessários não preenchidos.", 400);
+        }
+
+        $passwordsEntities = $this->repository->findInProgressAttendanceByUserId($parameters['id']);
 
         return Formatter::fromObjectToArray($passwordsEntities);
     }

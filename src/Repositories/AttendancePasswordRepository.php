@@ -33,7 +33,6 @@ class AttendancePasswordRepository extends AbstractRepository
 
     public function find(int $id)
     {
-
         $attendancePasswordRecord = $this->connection->createQueryBuilder()
             ->select("*")
             ->from($this->getTableName(), 'ap')
@@ -64,12 +63,22 @@ class AttendancePasswordRepository extends AbstractRepository
             );
         }
 
+        $userRepository = new UserRepository($this->connection);
+        $userEntity = null;
+
+        if ($attendancePasswordRecord['id_user']) {
+            $userEntity = $userRepository->find(
+                $attendancePasswordRecord['id_user']
+            );
+        }
+
         $attendancePasswordEntity = AttendancePasswordEntityFactory::create(
             $attendancePasswordRecord['name'],
             $categoryEntity,
             $statusEntity,
             $ticketWindowEntity,
-            $attendancePasswordRecord['id'],
+            $userEntity,
+            $attendancePasswordRecord['id']
         );
 
         return $attendancePasswordEntity;
@@ -87,6 +96,8 @@ class AttendancePasswordRepository extends AbstractRepository
             ->orWhere('aps.code = :canceledStatus')
             ->setParameter(':completedStatus', CompletedStatus::CODE)
             ->setParameter(':canceledStatus', CanceledStatus::CODE)
+            ->setMaxResults(10)
+            ->orderBy('ap.creation_date', 'DESC')
             ->execute()
             ->fetchAll();
 
@@ -164,6 +175,107 @@ class AttendancePasswordRepository extends AbstractRepository
         return $attendancePasswordEntities;
     }
 
+    public function findFirstAwaitingAttendance()
+    {
+        $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $attendancePasswordRecord = $this->connection->createQueryBuilder()
+            ->select('ap.*')
+            ->from($this->getTableName(), 'ap')
+            ->innerJoin('ap', $statusRepository->getTableName(),
+                'aps', 'ap.id_status = aps.id')
+            ->where('aps.code = :code')
+            ->setParameter(':code', CreatedStatus::CODE)
+            ->orderBy('creation_date', 'ASC')
+            ->execute()
+            ->fetch();
+
+        if (empty($attendancePasswordRecord)) {
+            throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
+        }
+
+        $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
+        $categoryEntity = $categoryRepository->find(
+            $attendancePasswordRecord['id_category']
+        );
+
+        $statusRepository = new AttendanceStatusRepository($this->connection);
+        $statusEntity = $statusRepository->find(
+            $attendancePasswordRecord['id_status']
+        );
+
+        $attendancePasswordEntity = AttendancePasswordEntityFactory::create(
+            $attendancePasswordRecord['name'],
+            $categoryEntity,
+            $statusEntity,
+            null,
+            null,
+            $attendancePasswordRecord['id']
+        );
+
+        return $attendancePasswordEntity;
+    }
+
+    public function findInProgressAttendanceByUserId(int $userId)
+    {
+        $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $attendancePasswordRecord = $this->connection->createQueryBuilder()
+            ->select('ap.*')
+            ->from($this->getTableName(), 'ap')
+            ->innerJoin('ap', $statusRepository->getTableName(),
+                'aps', 'ap.id_status = aps.id')
+            ->where('aps.code = :code')
+            ->setParameter(':code', InProgressStatus::CODE)
+            ->andWhere('ap.id_user  = :id_user')
+            ->setParameter(':id_user', $userId)
+            ->orderBy('creation_date', 'ASC')
+            ->execute()
+            ->fetch();
+
+        if (empty($attendancePasswordRecord)) {
+            throw new NotFoundException('Nenhum registro de senha de atendimento encontrado');
+        }
+
+        $categoryRepository = new AttendancePasswordCategoryRepository($this->connection);
+        $categoryEntity = $categoryRepository->find(
+            $attendancePasswordRecord['id_category']
+        );
+
+        $statusEntity = $statusRepository->find(
+            $attendancePasswordRecord['id_status']
+        );
+
+        $ticketWindowRepository = new TicketWindowRepository($this->connection);
+        $ticketWindowEntity = null;
+
+        if ($attendancePasswordRecord['id_ticket_window']) {
+            $ticketWindowEntity = $ticketWindowRepository->find(
+                $attendancePasswordRecord['id_ticket_window']
+            );
+        }
+
+        $userRepository = new UserRepository($this->connection);
+        $userEntity = null;
+
+        if ($attendancePasswordRecord['id_user']) {
+            $userEntity = $userRepository->find(
+                $attendancePasswordRecord['id_user']
+            );
+        }
+
+        $attendancePasswordEntity = AttendancePasswordEntityFactory::create(
+            $attendancePasswordRecord['name'],
+            $categoryEntity,
+            $statusEntity,
+            $ticketWindowEntity,
+            $userEntity,
+            $attendancePasswordRecord['id']
+        );
+
+        return $attendancePasswordEntity;
+    }
+
     public function findInProgressAttendances()
     {
         $statusRepository = new AttendanceStatusRepository($this->connection);
@@ -231,12 +343,22 @@ class AttendancePasswordRepository extends AbstractRepository
             );
         }
 
+        $userRepository = new UserRepository($this->connection);
+        $userEntity = null;
+
+        if ($attendancePasswordRecord['id_user']) {
+            $userEntity = $userRepository->find(
+                $attendancePasswordRecord['id_user']
+            );
+        }
+
         $attendancePasswordEntity = AttendancePasswordEntityFactory::create(
             $attendancePasswordRecord['name'],
             $categoryEntity,
             $statusEntity,
             $ticketWindowEntity,
-            $attendancePasswordRecord['id'],
+            $userEntity,
+            $attendancePasswordRecord['id']
         );
 
         return $attendancePasswordEntity;
@@ -267,12 +389,22 @@ class AttendancePasswordRepository extends AbstractRepository
                 );
             }
 
+            $userRepository = new UserRepository($this->connection);
+            $userEntity = null;
+
+            if ($attendancePasswordRecord['id_user']) {
+                $userEntity = $userRepository->find(
+                    $attendancePasswordRecord['id_user']
+                );
+            }
+
             $attendancePasswordEntities[] = AttendancePasswordEntityFactory::create(
                 $attendancePasswordRecord['name'],
                 $categoryEntity,
                 $statusEntity,
                 $ticketWindowEntity,
-                $attendancePasswordRecord['id'],
+                $userEntity,
+                $attendancePasswordRecord['id']
                 );
         }
 

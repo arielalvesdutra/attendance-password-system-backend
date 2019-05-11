@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS attendance_passwords (
     id_category INT(4) NOT NULL,
     id_ticket_window INT(4),
     id_status INT(4) NOT NULL,
+    id_user INT,
     creation_date VARCHAR(26),
     PRIMARY KEY (id),
     FOREIGN KEY (id_category)
@@ -35,7 +36,9 @@ CREATE TABLE IF NOT EXISTS attendance_passwords (
     FOREIGN KEY (id_ticket_window)
         REFERENCES ticket_window (id),
     FOREIGN KEY (id_status)
-        REFERENCES attendance_password_status (id)
+        REFERENCES attendance_password_status (id),
+    FOREIGN KEY (id_user)
+        REFERENCES users(id)
 )  ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS users (
