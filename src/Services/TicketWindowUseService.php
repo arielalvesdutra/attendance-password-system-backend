@@ -108,7 +108,7 @@ class TicketWindowUseService
     {
         $unusedTicketWindow = $this->repository->findUnusedTicketWindow();
 
-        return  Formatter::fromObjectToArray($unusedTicketWindow);
+        return Formatter::fromObjectToArray($unusedTicketWindow);
     }
 
     /**

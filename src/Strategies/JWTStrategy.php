@@ -2,7 +2,9 @@
 
 namespace App\Strategies;
 
+use Exception;
 use Firebase\JWT\JWT;
+use InvalidArgumentException;
 
 class JWTStrategy
 {

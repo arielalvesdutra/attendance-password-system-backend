@@ -15,7 +15,7 @@ class TicketWindowUseController extends AbstractController
      */
     protected $service;
 
-    public function use(ServerRequestInterface $request, ResponseInterface $response)
+    public function reserve(ServerRequestInterface $request, ResponseInterface $response)
     {
         try {
 
@@ -76,7 +76,7 @@ class TicketWindowUseController extends AbstractController
 
         } catch (NotFoundException $notFoundException) {
 
-            return $response->withJson($notFoundException->getMessage(), $notFoundException->getCode());
+            return $response->withJson([], 200);
         } catch (Exception $exception) {
 
             return $response->withJson($exception->getMessage(), $exception->getCode());
