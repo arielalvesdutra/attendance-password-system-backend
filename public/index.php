@@ -56,7 +56,8 @@ $container[AttendancePasswordController::class] = function ($container)
             new \App\Repositories\TicketWindowRepository($container['Connection']),
             new \App\Repositories\UserRepository($container['Connection'])
 
-        )
+        ),
+        new \App\Strategies\JWTStrategy()
     );
 };
 

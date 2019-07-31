@@ -145,16 +145,26 @@ class AttendancePasswordRepository extends AbstractRepository
         return $attendancePasswordEntities;
     }
 
-    public function findAwaitingAttendances()
+    public function findAwaitingAttendances(int $userId)
     {
         $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $userAllowPasswordCategoryRepository =
+                new UserPasswordCategoryRepository($this->connection);
+        /**
+         * 1. p.category_id = upc.category_id
+         * 2. upc.user_id = $userId
+         */
 
         $attendancePasswordRecords = $this->connection->createQueryBuilder()
             ->select('ap.*')
             ->from($this->getTableName(), 'ap')
             ->innerJoin('ap', $statusRepository->getTableName(), 'aps', 'ap.id_status = aps.id')
-            ->where('aps.code = ?')
-            ->setParameter(0, CreatedStatus::CODE)
+            ->innerJoin('ap',$userAllowPasswordCategoryRepository->getTableName(),
+                'upc', 'upc.password_category_id = ap.id_category AND upc.user_id = :userId')
+            ->setParameter(':userId', $userId)
+            ->where('aps.code = :code')
+            ->setParameter(':code', CreatedStatus::CODE)
             ->execute()
             ->fetchAll();
 

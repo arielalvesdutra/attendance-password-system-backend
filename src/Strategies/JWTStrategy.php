@@ -15,6 +15,27 @@ class JWTStrategy
     const BEARER_REGEX = "/(^bearer)/i";
 
     /**
+     * @param $bearer
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function decode($bearer)
+    {
+
+        $this->validateToken($bearer);
+
+        $secret = $this->getSecret();
+        $algorithms = [ 'HS256' ];
+        $tokenWithoutBearer = $this->removeBearerFromToken($bearer);
+
+        $decodedToken = (array) JWT::decode($tokenWithoutBearer, $secret, $algorithms) ;
+
+        return $decodedToken;
+    }
+
+    /**
      * Retorna o secret do JWT configurado no arquivo .env
      *
      * @return mixed

@@ -4,16 +4,25 @@ namespace App\Controllers;
 
 use App\Exceptions\NotFoundException;
 use App\Services\AttendancePasswordService;
+use App\Strategies\JWTStrategy;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AttendancePasswordController extends AbstractController
 {
+    protected $jwtStrategy;
+
     /**
      * @var AttendancePasswordService
      */
     protected $service;
+
+    public function __construct($service, JWTStrategy $jwtStrategy)
+    {
+        $this->service = $service;
+        $this->jwtStrategy = $jwtStrategy;
+    }
 
     public function attendPassword(ServerRequestInterface $request, ResponseInterface $response)
     {
@@ -138,12 +147,21 @@ class AttendancePasswordController extends AbstractController
     {
         try {
 
-            $attendancePasswords = $this->service->retrieveAwaitingAttendances();
+            $decodedToken =
+                $this->jwtStrategy->decode($request->getHeaderLine('Authorization'));
+
+            $parameters['user_id'] = $decodedToken['id'];
+
+            $attendancePasswords = $this->service->retrieveAwaitingAttendances($parameters);
 
             return $response->withJson($attendancePasswords, 200);
 
+        } catch (NotFoundException $notFoundException) {
+
+            return $response->withJson([], $notFoundException->getCode());
+
         } catch (Exception $exception) {
-            return $response->withJson($exception->getMessage(), $exception->getCode());
+            return $response->withJson($exception->getMessage(), 400);
         }
     }
 
