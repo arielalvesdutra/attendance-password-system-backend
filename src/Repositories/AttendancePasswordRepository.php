@@ -145,16 +145,22 @@ class AttendancePasswordRepository extends AbstractRepository
         return $attendancePasswordEntities;
     }
 
-    public function findAwaitingAttendances()
+    public function findAwaitingAttendances(int $userId)
     {
         $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $userAllowPasswordCategoryRepository =
+                new UserPasswordCategoryRepository($this->connection);
 
         $attendancePasswordRecords = $this->connection->createQueryBuilder()
             ->select('ap.*')
             ->from($this->getTableName(), 'ap')
             ->innerJoin('ap', $statusRepository->getTableName(), 'aps', 'ap.id_status = aps.id')
-            ->where('aps.code = ?')
-            ->setParameter(0, CreatedStatus::CODE)
+            ->innerJoin('ap',$userAllowPasswordCategoryRepository->getTableName(),
+                'upc', 'upc.password_category_id = ap.id_category AND upc.user_id = :userId')
+            ->setParameter(':userId', $userId)
+            ->where('aps.code = :code')
+            ->setParameter(':code', CreatedStatus::CODE)
             ->execute()
             ->fetchAll();
 
@@ -175,15 +181,21 @@ class AttendancePasswordRepository extends AbstractRepository
         return $attendancePasswordEntities;
     }
 
-    public function findFirstAwaitingAttendance()
+    public function findFirstAwaitingAttendance(int $userId)
     {
         $statusRepository = new AttendanceStatusRepository($this->connection);
+
+        $userAllowPasswordCategoryRepository =
+            new UserPasswordCategoryRepository($this->connection);
 
         $attendancePasswordRecord = $this->connection->createQueryBuilder()
             ->select('ap.*')
             ->from($this->getTableName(), 'ap')
             ->innerJoin('ap', $statusRepository->getTableName(),
                 'aps', 'ap.id_status = aps.id')
+            ->innerJoin('ap',$userAllowPasswordCategoryRepository->getTableName(),
+                'upc', 'upc.password_category_id = ap.id_category AND upc.user_id = :userId')
+            ->setParameter(':userId', $userId)
             ->where('aps.code = :code')
             ->setParameter(':code', CreatedStatus::CODE)
             ->orderBy('creation_date', 'ASC')

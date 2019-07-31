@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS attendance_passwords (
         REFERENCES ticket_window (id),
     FOREIGN KEY (id_status)
         REFERENCES attendance_password_status (id),
-    FOREIGN KEY (id_user)
+    FOREIGN KEY (id_user) 
         REFERENCES users(id)
 )  ENGINE=INNODB;
 
@@ -55,5 +55,13 @@ CREATE TABLE IF NOT EXISTS ticket_window_use (
   id_ticket_window INT NOT NULL UNIQUE,
   PRIMARY KEY (id_user, id_ticket_window),
   FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (id_ticket_window) ticket_window(id) ON DELETE CASCADE
+  FOREIGN KEY (id_ticket_window) REFERENCES ticket_window(id) ON DELETE CASCADE
+)engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS user_password_category(
+  user_id INT(11) NOT NULL,
+  password_category_id INT(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (password_category_id) REFERENCES attendance_password_categories(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, password_category_id)
 )engine=InnoDB;

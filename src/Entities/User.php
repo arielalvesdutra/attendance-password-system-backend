@@ -12,15 +12,31 @@ class User extends Entity
 
     protected $admin = false;
 
+    protected $allowedPasswordCategories = [];
+
     protected $email;
 
     protected $name;
 
     protected $password;
 
+    public function addAllowedPasswordCategory(AttendancePasswordCategory $attendancePasswordCategory)
+    {
+
+        $this->allowedPasswordCategories[$attendancePasswordCategory->getCode()] =
+            $attendancePasswordCategory;
+
+        return $this;
+    }
+
     public function getAdmin()
     {
         return $this->admin;
+    }
+
+    public function getAllowedPasswordCategories()
+    {
+        return $this->allowedPasswordCategories;
     }
 
     public function getEmail()
@@ -57,6 +73,16 @@ class User extends Entity
     {
         $this->admin = $isAdmin;
         return $this;
+    }
+
+    public function setAllowedPasswordCategories(array $allowedPasswordCategories)
+    {
+        if (!empty($allowedPasswordCategories)) {
+            $this->allowedPasswordCategories = $allowedPasswordCategories;
+            return $this;
+        }
+
+        throw new Exception('O array de categorias de senhas permitidas está vazio.');
     }
 
     public function setEmail(string $email)

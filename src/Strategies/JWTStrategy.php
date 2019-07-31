@@ -2,7 +2,9 @@
 
 namespace App\Strategies;
 
+use Exception;
 use Firebase\JWT\JWT;
+use InvalidArgumentException;
 
 class JWTStrategy
 {
@@ -11,6 +13,27 @@ class JWTStrategy
      * (case insensitive) no inicio da string
      */
     const BEARER_REGEX = "/(^bearer)/i";
+
+    /**
+     * @param $bearer
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function decode($bearer)
+    {
+
+        $this->validateToken($bearer);
+
+        $secret = $this->getSecret();
+        $algorithms = [ 'HS256' ];
+        $tokenWithoutBearer = $this->removeBearerFromToken($bearer);
+
+        $decodedToken = (array) JWT::decode($tokenWithoutBearer, $secret, $algorithms) ;
+
+        return $decodedToken;
+    }
 
     /**
      * Retorna o secret do JWT configurado no arquivo .env

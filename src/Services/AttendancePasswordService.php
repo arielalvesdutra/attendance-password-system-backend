@@ -67,7 +67,7 @@ class AttendancePasswordService
 
         } catch (NotFoundException $notFoundException) {
 
-            $passwordEntity = $this->repository->findFirstAwaitingAttendance();
+            $passwordEntity = $this->repository->findFirstAwaitingAttendance($userEntity->getId());
 
             $ticketWindowEntity = $this->ticketWindowRepository->find(
                 $parameters['ticketWindowId']
@@ -235,9 +235,15 @@ class AttendancePasswordService
         return Formatter::fromObjectToArray($passwordsEntities);
     }
 
-    public function retrieveAwaitingAttendances()
+    public function retrieveAwaitingAttendances(array $parameters)
     {
-        $passwordsEntities = $this->repository->findAwaitingAttendances();
+
+        if (empty($parameters['user_id'])) {
+            throw new InvalidArgumentException(
+                "Parametros necessários não preenchidos.", 400);
+        }
+
+        $passwordsEntities = $this->repository->findAwaitingAttendances($parameters['user_id']);
 
         return Formatter::fromObjectToArray($passwordsEntities);
     }

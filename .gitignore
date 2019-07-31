@@ -1,4 +1,8 @@
 .idea
 vendor/
 .phpunit.result.cache
-env.sh
+/nbproject/private/
+.buildpath
+.project
+nbproject/
+.settings

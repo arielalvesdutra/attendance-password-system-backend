@@ -56,7 +56,8 @@ $container[AttendancePasswordController::class] = function ($container)
             new \App\Repositories\TicketWindowRepository($container['Connection']),
             new \App\Repositories\UserRepository($container['Connection'])
 
-        )
+        ),
+        new \App\Strategies\JWTStrategy()
     );
 };
 
@@ -246,7 +247,7 @@ $slim->get('/ticket-window-use/retrieve-unused-ticket-window',
     TicketWindowUseController::class . ':retrieveUnused');
 $slim->post('/ticket-window-use/release',
     TicketWindowUseController::class . ':release');
-$slim->post('/ticket-window-use/use', TicketWindowUseController::class . ':use');
+$slim->post('/ticket-window-use/use', TicketWindowUseController::class . ':reserve');
 
 /**
  * Users
