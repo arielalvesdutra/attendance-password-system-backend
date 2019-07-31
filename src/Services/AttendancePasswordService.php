@@ -67,7 +67,7 @@ class AttendancePasswordService
 
         } catch (NotFoundException $notFoundException) {
 
-            $passwordEntity = $this->repository->findFirstAwaitingAttendance();
+            $passwordEntity = $this->repository->findFirstAwaitingAttendance($userEntity->getId());
 
             $ticketWindowEntity = $this->ticketWindowRepository->find(
                 $parameters['ticketWindowId']

@@ -35,7 +35,7 @@ class AttendancePasswordController extends AbstractController
             return $response->withJson($attendancePassword, 200);
 
         } catch (Exception $exception) {
-            return $response->withJson($exception->getMessage(), $exception->getCode());
+            return $response->withJson($exception->getMessage(), 400);
         }
     }
 
