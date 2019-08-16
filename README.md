@@ -70,7 +70,7 @@ Usuário:
 | /users | GET | Retorna todos os Usuários
 | /users/{id} | GET | Retorna um Usuário pelo ID
 | /users | POST | Cria um Usuário
-| /users/{id} | PUT | Atualiza um Usuário pelo ID
+| /users/{id} | PATCH | Atualiza um Usuário pelo ID
 
 Auth:
 
@@ -170,16 +170,19 @@ Status de Senha de Atendimento - /attendance-status/1:
 }
 ```
 
+### Exemplos de uso dos métodos PATCH
+
 Usuário - /users/1
 
 ```json
 {
   "name" : "Night King",
-  "password": "brandonstark"
+  "password": "brandonstark",
+  "admin": true
 }
 ```
 
-### Exemplos de uso dos métodos PATCH
+- Obs. 1: o e-mail não é atualizado
 
 Senha de Atendimento - /attendance-passwords/actions/attend-password
 

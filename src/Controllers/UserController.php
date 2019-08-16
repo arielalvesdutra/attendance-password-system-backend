@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Services\UserService;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -79,12 +80,15 @@ class UserController extends AbstractController
             $parameters = $request->getParsedBody();
             $parameters['id'] = $request->getAttribute('id');
 
-            $this->service->updateUser($parameters);
+            $updatedUser = $this->service->updateUser($parameters);
 
-            return $response->withStatus( 200);
+            return $response->withJson($updatedUser,  200);
 
+        } catch (NotFoundException $notFoundException) {
+            return $response->withJson($notFoundException->getMessage(),
+                                        $notFoundException->getCode());
         } catch (Exception $exception) {
-            return $response->withJson($exception->getMessage(), $exception->getCode());
+            return $response->withJson($exception->getMessage(), 400);
         }
     }
 }

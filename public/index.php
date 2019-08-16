@@ -256,6 +256,6 @@ $slim->delete('/users/{id}', UserController::class . ':delete');
 $slim->get('/users', UserController::class . ':retrieveAll');
 $slim->get('/users/{id}', UserController::class . ':retrieve');
 $slim->post('/users', UserController::class . ':create');
-$slim->put('/users/{id}', UserController::class . ':update');
+$slim->patch('/users/{id}', UserController::class . ':update');
 
 $slim->run();
