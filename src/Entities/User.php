@@ -31,7 +31,7 @@ class User extends Entity
 
     public function getAdmin()
     {
-        return $this->admin;
+        return (int)$this->admin;
     }
 
     public function getAllowedPasswordCategories()

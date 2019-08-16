@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Entities\User;
 use App\Exceptions\NotFoundException;
 use App\Factories\Entities\UserEntityFactory;
 use App\Formatters\Formatter;
@@ -13,15 +12,15 @@ use InvalidArgumentException;
 
 class UserService
 {
+    /**
+     * @var Connection
+     */
     protected $connection;
 
+    /**
+     * @var UserRepository
+     */
     protected $repository;
-
-    protected $categoryRepository;
-
-    protected $statusRepository;
-
-    protected $ticketWindowRepository;
 
     public function __construct(Connection $connection,
                                 UserRepository $repository)
@@ -30,6 +29,12 @@ class UserService
         $this->repository = $repository;
     }
 
+    /**
+     * @param array $parameters
+     *
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function createUser(array $parameters)
     {
         if (
@@ -74,6 +79,14 @@ class UserService
         }
     }
 
+    /**
+     * @param array $parameters
+     *
+     * @throws NotFoundException
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
     public function deleteUser(array $parameters)
     {
         if (empty($parameters['id'])) {
@@ -92,6 +105,12 @@ class UserService
 
         $this->connection->commit();
     }
+
+    /**
+     * @return array
+     *
+     * @throws NotFoundException
+     */
     public function retrieveAllUsers()
     {
         $userEntities = $this->repository->findAll();
@@ -99,7 +118,12 @@ class UserService
         return Formatter::fromObjectToArray($userEntities);
     }
 
-
+    /**
+     * @param array $parameters
+     * @return array
+     *
+     * @throws NotFoundException
+     */
     public function retrieveUser(array $parameters)
     {
         if (empty($parameters['id'])) {
@@ -112,6 +136,13 @@ class UserService
         return Formatter::fromObjectToArray($userEntity);
     }
 
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     *
+     * @throws NotFoundException
+     */
     public function retrieveUserByEmailAndPassword(array $parameters)
     {
         if (empty($parameters['email']) || empty($parameters['password'])) {
@@ -127,33 +158,51 @@ class UserService
         return Formatter::fromObjectToArray($userEntity);
     }
 
+    /**
+     * @param array $parameters
+     *
+     * @return array
+     *
+     * @throws NotFoundException
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function updateUser(array $parameters)
     {
-        if (
-            empty($parameters['id']) ||
-            empty($parameters['name']) ||
-            empty($parameters['password'])
-        ) {
+        if (empty($parameters['id'])) {
             throw new InvalidArgumentException(
                 'Parametros necessários não preenchidos.', 400);
         }
 
         $userEntity = $this->repository->find($parameters['id']);
 
-        $userEntity->setName($parameters['name']);
-        $userEntity->setPassword($parameters['password']);
+        $dataToUpdate = [];
+
+        if (!empty($parameters['name'])) {
+            $userEntity->setName($parameters['name']);
+            $dataToUpdate['name'] = $userEntity->getName();
+        }
+
+        if (!empty($parameters['password'])) {
+            $userEntity->setPassword($parameters['password']);
+            $dataToUpdate['password'] = $userEntity->getPassword();
+        }
+
+        if (isset($parameters['admin'])) {
+            $userEntity->setAdmin($parameters['admin']);
+            $dataToUpdate['admin'] = $userEntity->getAdmin();
+        }
 
         $this->connection->beginTransaction();
 
         $this->connection->update(
           $this->repository->getTableName(),
-            [
-                'name' => $userEntity->getName(),
-                'password' => $userEntity->getPassword()
-            ],
+            $dataToUpdate,
             [ 'id' => $userEntity->getId() ]
         );
 
         $this->connection->commit();
+
+        return Formatter::fromObjectToArray($userEntity);
     }
 }
