@@ -91,4 +91,24 @@ class UserController extends AbstractController
             return $response->withJson($exception->getMessage(), 400);
         }
     }
+
+    public function updateAllowedPasswordCategories(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ) {
+
+        try {
+
+            $parameters = $request->getParsedBody();
+            $parameters['id'] = $request->getAttribute('id');
+
+            $updatedUserPasswordCategories =
+                    $this->service->updateUserAllowedPasswordCategories($parameters);
+
+            return $response->withJson($updatedUserPasswordCategories,  200);
+
+        } catch (Exception $exception) {
+            return $response->withJson($exception->getMessage(), 400);
+        }
+    }
 }

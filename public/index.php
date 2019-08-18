@@ -101,7 +101,9 @@ $container[AuthController::class] = function ($container)
     return new \App\Controllers\AuthController(
         new \App\Services\UserService(
             $container['Connection'],
-            new \App\Repositories\UserRepository($container['Connection'])
+            new \App\Repositories\UserRepository($container['Connection']),
+            new \App\Repositories\AttendancePasswordCategoryRepository($container['Connection']),
+            new \App\Repositories\UserPasswordCategoryRepository($container['Connection'])
         )
     );
 };
@@ -148,7 +150,9 @@ $container[UserController::class] = function ($container)
     return new \App\Controllers\UserController(
         new \App\Services\UserService(
             $container['Connection'],
-            new \App\Repositories\UserRepository($container['Connection'])
+            new \App\Repositories\UserRepository($container['Connection']),
+            new \App\Repositories\AttendancePasswordCategoryRepository($container['Connection']),
+            new \App\Repositories\UserPasswordCategoryRepository($container['Connection'])
         )
     );
 };
@@ -257,5 +261,10 @@ $slim->get('/users', UserController::class . ':retrieveAll');
 $slim->get('/users/{id}', UserController::class . ':retrieve');
 $slim->post('/users', UserController::class . ':create');
 $slim->patch('/users/{id}', UserController::class . ':update');
+/**
+ * User Password Categories
+ */
+$slim->put('/users/{id}/allowed-password-categories',
+    UserController::class . ':updateAllowedPasswordCategories');
 
 $slim->run();

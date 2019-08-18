@@ -71,6 +71,7 @@ Usuário:
 | /users/{id} | GET | Retorna um Usuário pelo ID
 | /users | POST | Cria um Usuário
 | /users/{id} | PATCH | Atualiza um Usuário pelo ID
+| /users/{id}/allowed-password-categories | PUT | Atualiza o relacionamento de categorias de senha de atedimento que o usuário pode atender
 
 Auth:
 
@@ -167,6 +168,18 @@ Status de Senha de Atendimento - /attendance-status/1:
 {
   "name" : "Aguardando Gerente",
   "code" : "AWAITING_MANAGER"
+}
+```
+
+Categorias de senha que o usuário pode atender - /users/1/allowed-password-categories:
+
+```json
+{
+  "allowedPasswordCategories": [
+    { "id":  1, "name":  "Financeiro" },
+    { "id":  2, "name":  "Recursos Humanos" },
+    { "id":  3, "name":  "Comercial" }
+  ]
 }
 ```
 
