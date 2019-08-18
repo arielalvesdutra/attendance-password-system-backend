@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Entities\User;
 use App\Factories\Entities\UserEntityFactory;
 use App\Exceptions\NotFoundException;
 use Doctrine\DBAL\Connection;
+use Exception;
 
 class UserRepository extends AbstractRepository
 {
@@ -15,6 +17,14 @@ class UserRepository extends AbstractRepository
 
     protected $tableName = 'users';
 
+    /**
+     * @param int $id
+     *
+     * @return User
+     *
+     * @throws Exception
+     * @throws NotFoundException
+     */
     public function find(int $id)
     {
         $userRecord = $this->connection->createQueryBuilder()
@@ -36,9 +46,24 @@ class UserRepository extends AbstractRepository
             $userRecord['id']
         );
 
+        $userPasswordCategoryRepository = new UserPasswordCategoryRepository($this->connection);
+
+        try {
+
+            $userPasswordCategories = $userPasswordCategoryRepository->findPasswordCategoriesByUserId($id);
+
+            $userEntity->setAllowedPasswordCategories($userPasswordCategories);
+
+        } catch (NotFoundException $notFoundException) {}
+
         return $userEntity;
     }
 
+    /**
+     * @return User[]
+     *
+     * @throws NotFoundException
+     */
     public function findAll()
     {
         $userRecords = $this->connection->createQueryBuilder()
@@ -59,6 +84,13 @@ class UserRepository extends AbstractRepository
         return $userEntities;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return User
+     *
+     * @throws NotFoundException
+     */
     public function findFirstByEmail(string $email)
     {
         $userRecord = $this->connection->createQueryBuilder()
@@ -84,6 +116,14 @@ class UserRepository extends AbstractRepository
         return $userEntity;
     }
 
+    /**
+     * @param string $email
+     * @param string $password
+     *
+     * @return User
+     *
+     * @throws NotFoundException
+     */
     public function findByEmailAndPassword(string $email, string $password)
     {
         $userRecord = $this->connection->createQueryBuilder()

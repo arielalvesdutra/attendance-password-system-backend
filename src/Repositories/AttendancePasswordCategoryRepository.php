@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Entities\AttendancePasswordCategory;
 use App\Exceptions\NotFoundException;
 use App\Factories\Entities\AttendancePasswordCategoryEntityFactory;
 use Doctrine\DBAL\Connection;
@@ -15,6 +16,13 @@ class AttendancePasswordCategoryRepository extends AbstractRepository
 
     protected $tableName = 'attendance_password_categories';
 
+    /**
+     * @param int $id
+     *
+     * @return AttendancePasswordCategory
+     *
+     * @throws NotFoundException
+     */
     public function find(int $id)
     {
         $attendanceCategoryRecord = $this->connection->createQueryBuilder()
@@ -38,6 +46,11 @@ class AttendancePasswordCategoryRepository extends AbstractRepository
         return $attendanceCategoryEntity;
     }
 
+    /**
+     * @return array
+     *
+     * @throws NotFoundException
+     */
     public function findAll()
     {
         $attendanceCategoriesRecords = $this->connection->createQueryBuilder()
@@ -59,6 +72,14 @@ class AttendancePasswordCategoryRepository extends AbstractRepository
         return $attendanceCategoriesEntities;
     }
 
+    /**
+     * @param string $name
+     * @param string $code
+     *
+     * @return array
+     *
+     * @throws NotFoundException
+     */
     public function findByNameOrCode(string $name, string $code)
     {
         $attendanceCategories = $this->connection->createQueryBuilder()
